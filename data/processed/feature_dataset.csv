@@ -1,0 +1,2 @@
+age,medicine_count,total_dosage,has_conditions,elderly,high_dosage,toxicity_total,high_risk_present,interaction_risk_present,black_box_present,controlled_substance_present,dose_ratio_total,max_dose_ratio,requires_verification
+40,3,370,1,0,0,13,1,1,0,1,0.417,0.167,1

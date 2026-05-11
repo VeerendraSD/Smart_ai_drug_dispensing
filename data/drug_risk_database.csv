@@ -1,0 +1,21 @@
+medicine_name,generic_name,drug_class,max_safe_daily_dose_mg,controlled_substance,high_risk_drug,toxicity_score,schedule_type,requires_monitoring,interaction_risk_flag,black_box_warning
+Paracetamol,Acetaminophen,Analgesic,4000,0,0,2,OTC,0,0,0
+Ibuprofen,Ibuprofen,NSAID,3200,0,0,4,OTC,0,1,0
+Amoxicillin,Amoxicillin,Antibiotic,3000,0,0,3,Prescription,0,0,0
+Azithromycin,Azithromycin,Antibiotic,500,0,0,4,Prescription,0,1,0
+Omeprazole,Omeprazole,PPI,120,0,0,1,Prescription,0,0,0
+Gabapentin,Gabapentin,Neurological,3600,1,1,7,Schedule H,1,1,0
+Pregabalin,Pregabalin,Neurological,600,1,1,8,Schedule H,1,1,0
+Morphine,Morphine,Opioid,200,1,1,10,Schedule X,1,1,1
+Fentanyl,Fentanyl,Opioid,100,1,1,10,Schedule X,1,1,1
+Warfarin,Warfarin,Anticoagulant,15,1,1,10,Prescription,1,1,1
+Heparin,Heparin,Anticoagulant,40000,1,1,9,Prescription,1,1,1
+Metformin,Metformin,Antidiabetic,2550,0,0,3,Prescription,0,0,0
+Insulin,Insulin,Hormone,100,1,1,9,Prescription,1,1,1
+Prednisolone,Prednisolone,Steroid,60,0,1,7,Prescription,1,1,1
+Dexamethasone,Dexamethasone,Steroid,10,0,1,8,Prescription,1,1,1
+Clozapine,Clozapine,Antipsychotic,900,1,1,10,Schedule H,1,1,1
+Lithium,Lithium,Mood Stabilizer,1800,1,1,10,Prescription,1,1,1
+Levothyroxine,Levothyroxine,Hormone,300,0,0,5,Prescription,0,0,0
+Diazepam,Diazepam,Sedative,40,1,1,9,Schedule H1,1,1,1
+Tramadol,Tramadol,Opioid,400,1,1,8,Schedule H1,1,1,1
