@@ -38,7 +38,7 @@ This project aims to reduce medication errors, improve patient safety, and suppo
 
 ## Current Status
 
-✅ Phase 1 Completed
+*Phase 1 Completed*
 
 * OCR Pipeline
 * JSON Structuring
