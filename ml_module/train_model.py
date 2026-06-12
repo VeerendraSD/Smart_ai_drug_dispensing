@@ -17,7 +17,7 @@ import joblib
 # -----------------------------
 
 df = pd.read_csv(
-    "feature_dataset_1000_fixed.csv"
+    "data/processed/feature_dataset_1000_fixed (1).csv"
 )
 
 print("\nDataset Shape:")
@@ -119,7 +119,7 @@ print(importance)
 
 joblib.dump(
     model,
-    "ml_model/risk_classifier.pkl"
+    "ml_module/risk_classifier.pkl"
 )
 
 print(

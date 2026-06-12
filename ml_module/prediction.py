@@ -5,14 +5,14 @@ import joblib
 # LOAD MODEL
 # -----------------------------
 
-model = joblib.load("ml_model/risk_classifier.pkl")
+model = joblib.load("ml_module/risk_classifier.pkl")
 
 # -----------------------------
 # LOAD NEW FEATURE DATA
 # -----------------------------
 
 df = pd.read_csv(
-    "feature_dataset_1000_fixed.csv"
+    "data/processed/feature_dataset_1000_fixed (1).csv"
 )
 
 X = df.drop(
