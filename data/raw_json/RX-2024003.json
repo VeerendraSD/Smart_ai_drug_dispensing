@@ -1,0 +1,31 @@
+{
+    "prescription_id": "RX-2024003",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "RX-2024003",
+        "name": "",
+        "age": 31,
+        "gender": "F",
+        "existing_conditions": [
+            "GERD"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "70add579-b852-42d2-8c98-1ad5cbd6388e",
+            "name": "Sertraline",
+            "dosage_mg": 50,
+            "frequency_per_day": 2
+        },
+        {
+            "medicine_id": "f60c487e-989e-43ad-a372-2e93882bed39",
+            "name": "Omeprazole",
+            "dosage_mg": 20,
+            "frequency_per_day": 2
+        }
+    ],
+    "raw_text": "Green Valley Medical Group.\nDr. David Wilson - Gastroe nte rology\nPatient Michael White.\nDate: 2026-03-25\nAge/Sex: 31/ F\nID: PT-2106\nDIAGNOSIS:\nGERD\nRx\nMedicine | Dosage | Frequency | Duration\nSertraline | 50 mg |2x daily |7 days\nOmeprazole | 20 mg |2x daily |30 days\nPrescription ID: RX-2024003\nSigned Electronically\n"
+}

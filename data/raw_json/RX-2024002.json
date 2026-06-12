@@ -1,0 +1,37 @@
+{
+    "prescription_id": "RX-2024002",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "RX-2024002",
+        "name": "",
+        "age": 22,
+        "gender": "M",
+        "existing_conditions": [
+            "GERD"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "e99c88e9-1634-4e86-93e5-7be90518f51e",
+            "name": "Amlodipine",
+            "dosage_mg": 5,
+            "frequency_per_day": 3
+        },
+        {
+            "medicine_id": "bbdaab18-f9ba-4f91-96be-dc6276c5514c",
+            "name": "Amlodipine",
+            "dosage_mg": 5,
+            "frequency_per_day": 2
+        },
+        {
+            "medicine_id": "be456f5c-c8f9-49ab-9f27-d790d942cc6d",
+            "name": "Omeprazole",
+            "dosage_mg": 20,
+            "frequency_per_day": 2
+        }
+    ],
+    "raw_text": "City Health Center\nDr. Bob Johnson - Cardiology\nPatient Elizabeth Clark\nDate: 2026-04-06\nAge/Sex: 22 / M\nID: PT-1083\nDIAGNOSIS:\nGERD\nRx\nMedicine | Dosage | Frequency | Duration\nAmlodipine | 5mg |3x daily |7 days\nAmlodipine | 5mg|2x daily|7 days\nOmeprazole | 20 mg |2x daily |30 days\nPrescription ID: RX-2024002\nSigned Electronically\n"
+}

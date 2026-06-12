@@ -1,0 +1,31 @@
+{
+    "prescription_id": "RX-2024004",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "RX-2024004",
+        "name": "",
+        "age": 71,
+        "gender": "M",
+        "existing_conditions": [
+            "Acute Exacerbation of Bronchitis with Severe Bronchospasm"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "f38c08d4-ed18-4514-a7df-69bba40604d6",
+            "name": "Sertraline",
+            "dosage_mg": 200,
+            "frequency_per_day": 1
+        },
+        {
+            "medicine_id": "f593f720-1ccc-44e3-8498-7b953ae130a3",
+            "name": "Metformin",
+            "dosage_mg": 1000,
+            "frequency_per_day": 3
+        }
+    ],
+    "raw_text": "Metro General\nDr. Emily Brown - Endocrinology\nPatient James Williams\nDate: 2026-04-11\nAge/Sex: 71 / M\nID: PT-6557\nDIAGNOSIS:\nAcute Exacerbation of Bronchitis with Severe Bronchospasm\nRx\nMedicine | Dosage | Frequency | Duration\nSertraline | 200mg | 1x daily | 30 days\nMetformin | 1000mg | 3x daily | 90 days\nPrescription ID: RX-2024004\nSigned Electronically\n"
+}

@@ -4,15 +4,31 @@ import pandas as pd
 # -----------------------------
 # LOAD PRESCRIPTION JSON
 # -----------------------------
+import os
+import json
 
-with open("../data/raw_json/RX-2024001.json") as f:
+json_folder = "data/raw_json"
+
+json_files = [
+    f for f in os.listdir(json_folder)
+    if f.endswith(".json")
+]
+
+latest_json = max(
+    [os.path.join(json_folder, f)
+     for f in json_files],
+    key=os.path.getctime
+)
+
+with open(latest_json, "r") as f:
     data = json.load(f)
 
 # -----------------------------
 # LOAD DRUG RISK DATABASE CSV
 # -----------------------------
-
-drug_db = pd.read_csv("../data/drug_risk_database.csv")
+drug_db = pd.read_csv(
+    "data/drug_risk_database.csv"
+)
 
 # -----------------------------
 # BASIC FEATURES
@@ -199,7 +215,7 @@ print(df)
 # -----------------------------
 
 df.to_csv(
-    "../data/processed/feature_dataset.csv",
+    "data/processed/feature_dataset.csv",
     index=False
 )
 

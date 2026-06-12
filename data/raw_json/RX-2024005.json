@@ -1,0 +1,25 @@
+{
+    "prescription_id": "RX-2024005",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "RX-2024005",
+        "name": "",
+        "age": 73,
+        "gender": "F",
+        "existing_conditions": [
+            "Esse ntial Hyperte nsion"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "44196a73-d105-4d7c-b941-7a4802fdc4fc",
+            "name": "Lisinopril",
+            "dosage_mg": 10,
+            "frequency_per_day": 3
+        }
+    ],
+    "raw_text": "St Mary's General Hospital.\nDr. Grace Lee - Dermatology\nPatient Robert White\nDate: 2026-04-27\nAge/Sex: 73 / F\nID: PT-3130\nDIAGNOSIS:\nEsse ntial Hyperte nsion\nRx\nMedicine | Dosage | Frequency | Duration\nLisinopril | 10mg |3x daily |30 days\nPrescription ID: RX-2024005\nSigned Electronically\n"
+}
