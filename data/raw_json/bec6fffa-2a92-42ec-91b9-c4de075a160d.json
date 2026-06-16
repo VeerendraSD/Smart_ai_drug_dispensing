@@ -1,0 +1,31 @@
+{
+    "prescription_id": "bec6fffa-2a92-42ec-91b9-c4de075a160d",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "PT-2106",
+        "name": "",
+        "age": 31,
+        "gender": "F",
+        "existing_conditions": [
+            "GERD"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "dec332d4-e3dd-425c-8cab-4ebe3405e188",
+            "name": "Se rtraline",
+            "dosage_mg": 50,
+            "frequency_per_day": 2
+        },
+        {
+            "medicine_id": "616d6beb-8fba-445e-9a32-33b5626d2854",
+            "name": "Omeprazole",
+            "dosage_mg": 20,
+            "frequency_per_day": 2
+        }
+    ],
+    "raw_text": "Green Valley Modical Groupe\nDr. David Wilson Gastroenterology\nPatient Michael White.\nDate: 2026-03-25\nAge/Sex 31/F\nID: PT-2106\nDIAGNOSIS:\nGERD\nRx\nMedicine | Dosage | Frequency | Duration\nSe rtraline | 50mg |2x daily |7 days\nOmeprazole | 20mg | 2x daily |30 days\n"
+}

@@ -1,2 +1,2 @@
 age,medicine_count,total_dosage,has_conditions,elderly,high_dosage,toxicity_total,high_risk_present,interaction_risk_present,black_box_present,controlled_substance_present,dose_ratio_total,max_dose_ratio,requires_verification
-31,2,70,1,0,0,1,0,0,0,0,0.167,0.167,0
+71,2,1200,1,1,1,3,0,0,0,0,0.392,0.392,0

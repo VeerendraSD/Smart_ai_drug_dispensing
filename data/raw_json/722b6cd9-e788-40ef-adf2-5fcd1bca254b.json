@@ -1,0 +1,37 @@
+{
+    "prescription_id": "722b6cd9-e788-40ef-adf2-5fcd1bca254b",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "PT-5678",
+        "name": "",
+        "age": 45,
+        "gender": "M",
+        "existing_conditions": [
+            "Hypertension"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "93a337bb-6af1-44c4-a7af-55872666e39f",
+            "name": "Amlodipine",
+            "dosage_mg": 5,
+            "frequency_per_day": 1
+        },
+        {
+            "medicine_id": "78f55da0-62ab-47e4-b7c6-44ab2ce63150",
+            "name": "Metformin",
+            "dosage_mg": 500,
+            "frequency_per_day": 2
+        },
+        {
+            "medicine_id": "b7900fbb-dc84-4565-90a7-fc73c8fbcb93",
+            "name": "Omeprazole",
+            "dosage_mg": 20,
+            "frequency_per_day": 1
+        }
+    ],
+    "raw_text": "Green Valley Medical Group\nDr. Sarah Johnson - General Medicine\nPatient John Carter\nDate: 2026-06-16\nAge/Sex: 45 / M\nID: PT-5678\nDIAGNOSIS\nHypertension\nRx\nMedicine | Dosage | Frequency | Duration\nAmlodipine | 5mg | 1x daily |30 days\nMetformin | 500mg |2x daily |30 days\nOmeprazole | 20mg|1x daily| 14 days\n"
+}
