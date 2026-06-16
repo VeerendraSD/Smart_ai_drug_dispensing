@@ -12,7 +12,7 @@ model = joblib.load("ml_module/risk_classifier.pkl")
 # -----------------------------
 
 df = pd.read_csv(
-    "data/processed/feature_dataset_1000_fixed (1).csv"
+    "data/processed/feature_dataset.csv"
 )
 
 X = df.drop(

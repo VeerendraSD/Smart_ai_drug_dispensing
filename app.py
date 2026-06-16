@@ -3,6 +3,7 @@ import pandas as pd
 import subprocess
 import joblib
 import os
+import sys
 
 st.set_page_config(
     page_title="Smart AI Drug Dispensing",
@@ -12,7 +13,7 @@ st.set_page_config(
 
 st.title("💊 Smart AI Drug Dispensing System")
 
-PYTHON_PATH = r"C:\Users\veere\AppData\Local\Programs\Python\Python310\python.exe"
+PYTHON_PATH = sys.executable
 
 # =====================================
 # UPLOAD IMAGE
@@ -47,23 +48,41 @@ if st.button("🔍 Analyze Prescription"):
 
         with st.spinner("Analyzing Prescription..."):
 
-            subprocess.run(
+            # OCR
+            result = subprocess.run(
                 [PYTHON_PATH, "nlp_module/ocr_engine.py"],
                 capture_output=True,
                 text=True
             )
 
-            subprocess.run(
+            if result.returncode != 0:
+                st.error("OCR Engine Failed")
+                st.code(result.stderr)
+                st.stop()
+
+            # JSON Generation
+            result = subprocess.run(
                 [PYTHON_PATH, "nlp_module/json_generator.py"],
                 capture_output=True,
                 text=True
             )
 
-            subprocess.run(
+            if result.returncode != 0:
+                st.error("JSON Generator Failed")
+                st.code(result.stderr)
+                st.stop()
+
+            # Feature Engineering
+            result = subprocess.run(
                 [PYTHON_PATH, "datascience_module/preprocessing.py"],
                 capture_output=True,
                 text=True
             )
+
+            if result.returncode != 0:
+                st.error("Feature Engineering Failed")
+                st.code(result.stderr)
+                st.stop()
 
         st.success("✅ Analysis Completed Successfully")
 
