@@ -1,27 +1,17 @@
 import json
+import os
 import pandas as pd
 
-# -----------------------------
-# LOAD PRESCRIPTION JSON
-# -----------------------------
-import os
-import json
+# Consume the JSON produced by the current OCR run, never an arbitrary old file.
+current_json = "data/processed/current_prescription.json"
+if not os.path.exists(current_json):
+    raise FileNotFoundError("Current prescription JSON is missing; run OCR and parsing first.")
 
-json_folder = "data/raw_json"
-
-json_files = [
-    f for f in os.listdir(json_folder)
-    if f.endswith(".json")
-]
-
-latest_json = max(
-    [os.path.join(json_folder, f)
-     for f in json_files],
-    key=os.path.getctime
-)
-
-with open(latest_json, "r") as f:
+with open(current_json, "r", encoding="utf-8") as f:
     data = json.load(f)
+
+if data.get("extraction_status") != "ok" or not data.get("medicines"):
+    raise ValueError("Prescription extraction is insufficient: no usable medicines were found.")
 
 # -----------------------------
 # LOAD DRUG RISK DATABASE CSV
@@ -188,6 +178,15 @@ features = {
         requires_verification
 }
 
+with open("data/processed/risk_analysis.json", "w", encoding="utf-8") as f:
+    json.dump({
+        "risk_score": min(risk_score, 10),
+        "risk_scale": 10,
+        "requires_verification": requires_verification,
+        "source_prescription_id": data.get("prescription_id"),
+        "prediction_status": "rule_based"
+    }, f, indent=2)
+
 # -----------------------------
 # PRINT FEATURES
 # -----------------------------
@@ -195,6 +194,7 @@ features = {
 print("\nExtracted Features:\n")
 
 print(features)
+print("Feature vector shape: (1,", len(features) - 1, ")")
 
 print("\nGenerated Risk Score:\n")
 

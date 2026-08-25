@@ -4,7 +4,7 @@ import uuid
 import os
 
 # Read OCR extracted text from file
-with open("data/processed/ocr_text.txt", "r") as file:
+with open("data/processed/ocr_text.txt", "r", encoding="utf-8") as file:
     text_data = file.read()
 
 # Split lines
@@ -28,8 +28,9 @@ prescription_data = {
     },
 
     "medicines": [],
-
-    "raw_text": text_data
+    "raw_text": text_data,
+    "extraction_status": "ok",
+    "extraction_warnings": []
 }
 
 # -----------------------------
@@ -81,7 +82,8 @@ for i, line in enumerate(lines):
         )
 
 # -----------------------------
-# Extract Medicines
+# Extract Medicines. Support both the table format produced by the sample
+# prescriptions and plain OCR lines such as "Paracetamol 500 mg 2x".
 # -----------------------------
 for line in lines:
 
@@ -108,13 +110,31 @@ for line in lines:
 
             frequency = int(frequency_match.group(1)) if frequency_match else 0
 
-            # Append medicine JSON
+            duration_match = re.search(r'(\d+)\s*(?:day|days|week|weeks)', line, re.I)
+            duration = int(duration_match.group(1)) if duration_match else None
             prescription_data["medicines"].append({
                 "medicine_id": str(uuid.uuid4()),
                 "name": medicine_name,
                 "dosage_mg": dosage,
-                "frequency_per_day": frequency
+                "frequency_per_day": frequency,
+                "duration_days": duration
             })
+            continue
+
+    plain_match = re.match(
+        r'^\s*([A-Za-z][A-Za-z -]{2,})\s+(\d+(?:\.\d+)?)\s*mg\b'
+        r'(?:\s+(\d+)\s*x)?(?:.*?for\s+(\d+)\s*days?)?',
+        line,
+        re.I
+    )
+    if plain_match:
+        prescription_data["medicines"].append({
+            "medicine_id": str(uuid.uuid4()),
+            "name": plain_match.group(1).strip(),
+            "dosage_mg": float(plain_match.group(2)),
+            "frequency_per_day": int(plain_match.group(3) or 0),
+            "duration_days": int(plain_match.group(4)) if plain_match.group(4) else None
+        })
 
 # -----------------------------
 # Create raw_json folder
@@ -129,6 +149,12 @@ os.makedirs(output_folder, exist_ok=True)
 if prescription_data["prescription_id"] == "":
     prescription_data["prescription_id"] = str(uuid.uuid4())
 
+if not prescription_data["medicines"]:
+    prescription_data["extraction_status"] = "insufficient_data"
+    prescription_data["extraction_warnings"].append(
+        "No medicine name and dosage could be extracted from OCR text."
+    )
+
 output_file = os.path.join(
     output_folder,
     f"{prescription_data['prescription_id']}.json"
@@ -140,8 +166,14 @@ output_file = os.path.join(
 with open(output_file, "w") as json_file:
     json.dump(prescription_data, json_file, indent=4)
 
+with open("data/processed/current_prescription.json", "w", encoding="utf-8") as json_file:
+    json.dump(prescription_data, json_file, indent=4)
+
 # -----------------------------
 # Print Success Message
 # -----------------------------
 print("\nJSON file created successfully!")
 print(f"\nSaved at: {output_file}")
+print(f"Medicines extracted: {len(prescription_data['medicines'])}")
+print(f"Extraction status: {prescription_data['extraction_status']}")
+print(f"Extracted medicine data: {prescription_data['medicines']}")

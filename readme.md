@@ -46,6 +46,19 @@ This project aims to reduce medication errors, improve patient safety, and suppo
 * Risk Label Generation
 * ML-Ready Dataset Creation
 
+    ## Running Diagnostics
+
+    Set `SMART_DRUG_DEBUG=1` before starting Streamlit to display OCR output,
+    structured extraction, feature vectors, model input, and model output. The
+    application reports rule-based risk separately from ML confidence and marks
+    missing extraction or model data for manual review.
+
+    Run the regression test with:
+
+    ```text
+    python -m unittest tests.test_pipeline_regression
+    ```
+
 ---
 
 ## Future Scope

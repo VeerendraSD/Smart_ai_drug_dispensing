@@ -8,12 +8,18 @@ ocr = PaddleOCR(lang='en')
 image_path = r"data/prescriptionimages/Code_Generated_image.png"
 
 # Run OCR
+if not os.path.exists(image_path):
+    raise FileNotFoundError(f"Prescription image not found: {image_path}")
+
 result = ocr.ocr(image_path)
 
 # Store extracted text
 extracted_text = []
 
 print("\nExtracted Text:\n")
+
+if not result or not result[0]:
+    raise ValueError("OCR returned no text")
 
 for line in result[0]:
 
