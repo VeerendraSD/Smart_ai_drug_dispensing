@@ -1,0 +1,37 @@
+{
+    "prescription_id": "433dc694-dd22-4102-ab92-0cdf956a537f",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "PT-1083",
+        "name": "",
+        "age": 22,
+        "gender": "M",
+        "existing_conditions": [
+            "GERD"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "c823c204-66d3-4959-a112-ff9102a7e16c",
+            "name": "Amlodipine",
+            "dosage_mg": 5,
+            "frequency_per_day": 3
+        },
+        {
+            "medicine_id": "bee2378e-922b-4e33-ab42-0e994ab63268",
+            "name": "Amlodipine",
+            "dosage_mg": 5,
+            "frequency_per_day": 2
+        },
+        {
+            "medicine_id": "cc0ba322-7a06-44f3-be88-fbfd33d61145",
+            "name": "Ome prazole",
+            "dosage_mg": 20,
+            "frequency_per_day": 2
+        }
+    ],
+    "raw_text": "City Health Center\nDr. Bob Johnson - Cardiology\nPatient Elizabeth Clark\nDate: 2026-04-06\nAge/Sex: 22 / M\nID: PT-1083\nDIAGNOSIS:\nGERD\nRx\nMedicine | Dosage | Freque ncy | Duration\nAmlodipine | 5mg |3x daily |7 days\nAmlodipine |5mg |2x daily |7 days\nOme prazole | 20 mg |2x daily |30 days\n"
+}

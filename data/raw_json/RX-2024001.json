@@ -1,0 +1,37 @@
+{
+    "prescription_id": "RX-2024001",
+    "doctor": {
+        "doctor_name": "",
+        "department": ""
+    },
+    "patient": {
+        "patient_id": "RX-2024001",
+        "name": "",
+        "age": 40,
+        "gender": "F",
+        "existing_conditions": [
+            "Mild Bronchitis"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "98470a1e-a25c-46f6-aaa2-77f5665230bd",
+            "name": "Levothyroxine",
+            "dosage_mg": 50,
+            "frequency_per_day": 3
+        },
+        {
+            "medicine_id": "328708fe-ab83-4794-bf6d-1e0eaaca7771",
+            "name": "Omeprazole",
+            "dosage_mg": 20,
+            "frequency_per_day": 3
+        },
+        {
+            "medicine_id": "517d6b4b-65fb-4394-8875-c422dc7d37ea",
+            "name": "Gabapentin",
+            "dosage_mg": 300,
+            "frequency_per_day": 1
+        }
+    ],
+    "raw_text": "Green Valley Medical Group\nDr. Alice Smith - Internal Medicine\nPatient Linda Smith\nDate: 2026-04-27\nAge/Sex: 40 / F\nID: PT-7909\nDIAGNOSIS:\nMild Bronchitis\nRx\nMedicine | Dosage | Frequency | Duration\nLevothyroxine | 50 mg |3x daily |30 days\nOmeprazole | 20 mg |3x daily |7 days\nGabapentin | 300mg |1x daily |7 days\nPrescription ID: RX-2024001\nSigned Electronically\n"
+}
