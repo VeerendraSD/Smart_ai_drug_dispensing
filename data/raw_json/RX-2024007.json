@@ -6,7 +6,7 @@
     },
     "patient": {
         "patient_id": "PT-6557",
-        "name": "",
+        "name": "James Williams",
         "age": 71,
         "gender": "M",
         "existing_conditions": [
@@ -15,7 +15,7 @@
     },
     "medicines": [
         {
-            "medicine_id": "5599cce7-2f7c-4248-aa0f-4ed24339b42e",
+            "medicine_id": "7a662232-5371-4755-a04d-fbf96dc02593",
             "name": "Paracetamol",
             "dosage_mg": 500,
             "frequency_per_day": 0

@@ -1,13 +1,22 @@
 import json
 import pandas as pd
 import os
+import sys
 
 
 # =====================================
 # PROJECT PATH
 # =====================================
 
-PROJECT_ROOT = r"C:\Users\veere\OneDrive\Desktop\Smart_ai_drug_dispensing-main"
+# preprocessing.py is inside Smart_ai_drug_dispensing-main/datascience_module/,
+# so the project root is one level up. Computing this from the script's own
+# location (instead of a hardcoded machine-specific path) makes the pipeline
+# work from any checkout location or machine.
+PROJECT_ROOT = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
 
 
 # =====================================
@@ -163,7 +172,19 @@ for med in data["medicines"]:
         med_name.lower()
     ]
 
-    if not matched.empty:
+    if matched.empty:
+
+        # An unmatched medicine contributes no toxicity/risk flags at all,
+        # which can silently understate risk. This isn't fatal (the drug
+        # database may just be incomplete), but it must be visible rather
+        # than a silent no-op.
+        print(
+            f"WARNING: '{med_name}' not found in drug_risk_database.csv "
+            "— it will not contribute to risk scoring.",
+            file=sys.stderr
+        )
+
+    else:
 
         row = matched.iloc[0]
 
@@ -334,9 +355,6 @@ features = {
             max_dose_ratio,
             3
         ),
-
-    "requires_verification":
-        requires_verification
 }
 
 

@@ -2,6 +2,7 @@ import re
 import json
 import uuid
 import os
+import sys
 
 # =====================================
 # PROJECT ROOT
@@ -104,8 +105,11 @@ for line in lines:
 
 for line in lines:
 
+    # Handles "Patient: Name", "Patient:Name" and "Patient Name" —
+    # the colon-attached form is what the real OCR output produces
+    # most of the time, and the old pattern (whitespace-only) missed it.
     match = re.search(
-        r'Patient\s+(.+)',
+        r'Patient[:\s]+(.+)',
         line,
         re.IGNORECASE
     )
@@ -180,7 +184,30 @@ for line in lines:
         if clean_line == "":
             continue
 
-        if clean_line.lower() == "rx":
+        # The diagnosis section is expected to end at an "Rx" marker line,
+        # but OCR frequently drops/garbles that single-word marker (e.g.
+        # reads "Rx" as "x"). Relying on it alone let the medicine table,
+        # signature line, and prescription ID leak into existing_conditions.
+        # Also stop at any of those unambiguous section boundaries.
+        is_rx_marker = clean_line.lower() == "rx"
+        is_medicine_header = (
+            "Medicine" in clean_line and "Dosage" in clean_line
+        )
+        is_medicine_row = "|" in clean_line
+        is_signature_line = clean_line.lower().startswith("signed")
+        is_prescription_id_line = re.search(
+            r'Prescription ID[:\s]*[A-Z0-9\-]+',
+            clean_line,
+            re.IGNORECASE
+        )
+
+        if (
+            is_rx_marker
+            or is_medicine_header
+            or is_medicine_row
+            or is_signature_line
+            or is_prescription_id_line
+        ):
             break
 
         prescription_data[
@@ -265,6 +292,30 @@ for line in lines:
             })
 
 # =====================================
+# VALIDATE EXTRACTED DATA
+# =====================================
+
+# A real prescription always lists at least one medicine. Zero medicines
+# means OCR/parsing effectively failed, not that the prescription is
+# genuinely empty. Continuing silently would let a garbage/empty
+# prescription flow through preprocessing and the model as if it were a
+# normal (and likely "safe") case, so fail loudly instead.
+if not prescription_data["medicines"]:
+
+    print(
+        "\nERROR: No medicines could be extracted from the OCR text.",
+        file=sys.stderr
+    )
+
+    print(
+        "This usually means OCR failed to read the prescription image "
+        "correctly, or the prescription format is unrecognized.",
+        file=sys.stderr
+    )
+
+    sys.exit(1)
+
+# =====================================
 # CREATE CORRECT RAW JSON FOLDER
 # =====================================
 
@@ -314,10 +365,12 @@ with open(
 # SAVE EXACT JSON PATH
 # -----------------------------
 
-project_root = r"C:\Users\veere\OneDrive\Desktop\Smart_ai_drug_dispensing-main"
-
+# Reuse the PROJECT_ROOT computed at the top of this file (relative to
+# this script's own location) instead of a machine-specific absolute
+# path — the previous hardcoded path broke the pipeline on any machine
+# or checkout location other than the original developer's.
 latest_json_path = os.path.join(
-    project_root,
+    PROJECT_ROOT,
     "data",
     "processed",
     "latest_json_path.txt"

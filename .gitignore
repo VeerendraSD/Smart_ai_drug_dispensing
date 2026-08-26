@@ -4,3 +4,4 @@ venv/
 __pycache__/
 *.pyc
 data/processed/ocr_text.txt
+data/database.db

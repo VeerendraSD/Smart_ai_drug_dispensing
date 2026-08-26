@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 
 # =====================================
 # PROJECT ROOT
@@ -45,6 +46,20 @@ image_path = os.path.join(
     "prescriptionimages",
     "Code_Generated_image.png"
 )
+
+
+# =====================================
+# VERIFY IMAGE EXISTS
+# =====================================
+
+if not os.path.exists(image_path):
+
+    print(
+        f"\nERROR: Prescription image not found at:\n{image_path}",
+        file=sys.stderr
+    )
+
+    sys.exit(1)
 
 
 # =====================================
@@ -133,13 +148,19 @@ if extracted_text:
         f"Extracted {len(extracted_text)} lines of text."
     )
 
-else:
-
     print(
-        "\nWARNING: OCR completed but no text was extracted."
+        f"\nOCR text saved successfully at:\n{output_path}"
     )
 
+else:
 
-print(
-    f"\nOCR text saved successfully at:\n{output_path}"
-)
+    # No text extracted means the rest of the pipeline (JSON generation,
+    # feature engineering, prediction) would silently run on an empty
+    # prescription and could still produce a misleading "safe" result.
+    # Fail the stage instead of letting app.py continue with old/empty data.
+    print(
+        "\nERROR: OCR completed but no text was extracted from the image.",
+        file=sys.stderr
+    )
+
+    sys.exit(1)
