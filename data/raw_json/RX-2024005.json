@@ -1,25 +1,32 @@
 {
     "prescription_id": "RX-2024005",
     "doctor": {
-        "doctor_name": "",
-        "department": ""
+        "doctor_name": "Emily Brown",
+        "department": "Endocrinology"
     },
     "patient": {
-        "patient_id": "RX-2024005",
-        "name": "",
-        "age": 73,
-        "gender": "F",
+        "patient_id": "PT-6557",
+        "name": "James Williams",
+        "age": 71,
+        "gender": "M",
         "existing_conditions": [
-            "Esse ntial Hyperte nsion"
+            "Type 2 Diabetes Mellitus",
+            "x"
         ]
     },
     "medicines": [
         {
-            "medicine_id": "44196a73-d105-4d7c-b941-7a4802fdc4fc",
-            "name": "Lisinopril",
-            "dosage_mg": 10,
-            "frequency_per_day": 3
+            "medicine_id": "e6036224-1601-46c4-a174-5b40eadff29f",
+            "name": "Sertraline",
+            "dosage_mg": 50,
+            "frequency_per_day": 1
+        },
+        {
+            "medicine_id": "0f8b63f0-ca09-47f4-87da-c3750a6c61a6",
+            "name": "Metformin",
+            "dosage_mg": 500,
+            "frequency_per_day": 2
         }
     ],
-    "raw_text": "St Mary's General Hospital.\nDr. Grace Lee - Dermatology\nPatient Robert White\nDate: 2026-04-27\nAge/Sex: 73 / F\nID: PT-3130\nDIAGNOSIS:\nEsse ntial Hyperte nsion\nRx\nMedicine | Dosage | Frequency | Duration\nLisinopril | 10mg |3x daily |30 days\nPrescription ID: RX-2024005\nSigned Electronically\n"
+    "raw_text": "MetroGeneral\nDr. Emily Brown - Endocrinology\nPatient: James Williams\nDate: 2026-04-11\nAge/Sex: 71/M\nID: PT-6557\nDIAGNOSIS:\nType 2 Diabetes Mellitus\nx\nMedicine | Dosage | Frequency | Duration\nSertraline | 50mg | 1x daily | 30 days\nMetformin | 500mg | 2x daily (with meals) | 30 days\nSigned Electronically\nPrescription ID: RX-2024005\n"
 }

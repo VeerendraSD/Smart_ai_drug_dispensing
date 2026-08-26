@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Smart AI Drug Dispensing System</title>
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">💊</span>
+      <div>
+        <h1>Smart AI Drug Dispensing</h1>
+        <p>AI-assisted prescription risk verification</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- ===================== UPLOAD CARD ===================== -->
+    <section class="card upload-card">
+
+      <h2 class="card-title">1. Upload Prescription</h2>
+
+      <label id="dropzone" class="dropzone" for="file-input">
+        <div id="dropzone-empty" class="dropzone-empty">
+          <span class="dropzone-icon">📄</span>
+          <p><strong>Click to upload</strong> or drag & drop</p>
+          <p class="dropzone-hint">PNG or JPG prescription image</p>
+        </div>
+        <img id="preview-image" class="preview-image hidden" alt="Prescription preview" />
+      </label>
+      <input id="file-input" type="file" accept="image/png,image/jpeg,image/jpg" hidden />
+
+      <div class="upload-actions">
+        <button id="analyze-btn" class="btn btn-primary" disabled>
+          <span class="analyze-spinner"></span><span id="analyze-btn-label">🔍 Analyze Prescription</span>
+        </button>
+        <span id="upload-status" class="status-text"></span>
+      </div>
+
+    </section>
+
+    <!-- ===================== ERROR BANNER ===================== -->
+    <section id="error-banner" class="card error-card hidden">
+      <h2 class="card-title">⚠️ Pipeline Error</h2>
+      <pre id="error-text" class="error-pre"></pre>
+    </section>
+
+    <!-- ===================== RESULTS ===================== -->
+    <section id="results" class="results hidden">
+
+      <!-- Verdict -->
+      <div id="verdict-banner" class="card verdict-banner">
+        <div class="verdict-icon" id="verdict-icon">✅</div>
+        <div>
+          <h2 id="verdict-title">SAFE TO DISPENSE</h2>
+          <p id="verdict-subtitle">Medicine can be dispensed safely.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+
+        <!-- Patient / Doctor -->
+        <div class="card">
+          <h2 class="card-title">👤 Prescription Details</h2>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Patient Name</span>
+              <span class="detail-value" id="patient-name">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Age</span>
+              <span class="detail-value" id="patient-age">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Gender</span>
+              <span class="detail-value" id="patient-gender">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Doctor</span>
+              <span class="detail-value" id="doctor-name">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Department</span>
+              <span class="detail-value" id="doctor-department">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="card">
+          <h2 class="card-title">🧠 Risk Analysis</h2>
+          <div class="metric-row">
+            <div class="metric-tile">
+              <span class="metric-value" id="metric-age">—</span>
+              <span class="metric-label">Age</span>
+            </div>
+            <div class="metric-tile">
+              <span class="metric-value" id="metric-medcount">—</span>
+              <span class="metric-label">Medicines</span>
+            </div>
+            <div class="metric-tile">
+              <span class="metric-value" id="metric-toxicity">—</span>
+              <span class="metric-label">Toxicity Score</span>
+            </div>
+          </div>
+          <div class="score-row">
+            <div class="score-block">
+              <div class="score-bar-track">
+                <div class="score-bar-fill" id="confidence-bar"></div>
+              </div>
+              <div class="score-caption">
+                <span>Model Confidence</span>
+                <strong id="confidence-value">—</strong>
+              </div>
+            </div>
+            <div class="score-block">
+              <div class="score-bar-track">
+                <div class="score-bar-fill risk" id="risk-bar"></div>
+              </div>
+              <div class="score-caption">
+                <span>Risk Score</span>
+                <strong id="risk-value">—</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Risk Factors -->
+      <div class="card">
+        <h2 class="card-title">⚠ Risk Factors</h2>
+        <div id="risk-factors" class="chip-row"></div>
+      </div>
+
+      <!-- OCR Output -->
+      <details class="card details-card">
+        <summary>📄 OCR Output</summary>
+        <pre id="ocr-text" class="mono-block"></pre>
+      </details>
+
+      <!-- Raw Feature Data -->
+      <details class="card details-card">
+        <summary>🔬 Raw Feature Data</summary>
+        <div class="table-wrap">
+          <table id="feature-table"></table>
+        </div>
+      </details>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    Smart AI Drug Dispensing System — for prescription verification support, not a substitute for clinical judgment.
+  </footer>
+
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

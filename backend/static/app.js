@@ -1,0 +1,202 @@
+(() => {
+  const fileInput = document.getElementById("file-input");
+  const dropzone = document.getElementById("dropzone");
+  const dropzoneEmpty = document.getElementById("dropzone-empty");
+  const previewImage = document.getElementById("preview-image");
+  const analyzeBtn = document.getElementById("analyze-btn");
+  const analyzeBtnLabel = document.getElementById("analyze-btn-label");
+  const uploadStatus = document.getElementById("upload-status");
+  const errorBanner = document.getElementById("error-banner");
+  const errorText = document.getElementById("error-text");
+  const results = document.getElementById("results");
+
+  // The file (and its identity) currently loaded into the picker.
+  // `analyzedFileKey` records which file the results on screen belong
+  // to — if the user picks a different file, results are hidden again
+  // until they click Analyze, so a new upload can never be shown next
+  // to a stale, previous analysis.
+  let selectedFile = null;
+  let analyzedFileKey = null;
+
+  function fileKey(file) {
+    return `${file.name}:${file.size}:${file.lastModified}`;
+  }
+
+  function resetResults() {
+    results.classList.add("hidden");
+    errorBanner.classList.add("hidden");
+  }
+
+  function handleFileSelected(file) {
+    if (!file) return;
+
+    const validTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!validTypes.includes(file.type)) {
+      uploadStatus.textContent = "Please choose a PNG or JPG image.";
+      return;
+    }
+
+    selectedFile = file;
+    analyzeBtn.disabled = false;
+    uploadStatus.textContent = file.name;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImage.src = e.target.result;
+      previewImage.classList.remove("hidden");
+      dropzoneEmpty.classList.add("hidden");
+    };
+    reader.readAsDataURL(file);
+
+    // A newly selected image immediately invalidates any results
+    // currently on screen — they belonged to whatever was analyzed
+    // before, not to this new file.
+    if (analyzedFileKey !== fileKey(file)) {
+      resetResults();
+    }
+  }
+
+  fileInput.addEventListener("change", (e) => {
+    handleFileSelected(e.target.files[0]);
+  });
+
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.classList.add("dragover");
+  });
+
+  dropzone.addEventListener("dragleave", () => {
+    dropzone.classList.remove("dragover");
+  });
+
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("dragover");
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      fileInput.files = e.dataTransfer.files;
+      handleFileSelected(e.dataTransfer.files[0]);
+    }
+  });
+
+  function setLoading(isLoading) {
+    analyzeBtn.disabled = isLoading || !selectedFile;
+    analyzeBtn.classList.toggle("loading", isLoading);
+    analyzeBtnLabel.textContent = isLoading
+      ? "Analyzing..."
+      : "🔍 Analyze Prescription";
+  }
+
+  function showError(message) {
+    errorText.textContent = message;
+    errorBanner.classList.remove("hidden");
+    results.classList.add("hidden");
+  }
+
+  function renderResults(data) {
+    document.getElementById("patient-name").textContent = data.patient.name;
+    document.getElementById("patient-age").textContent = data.patient.age ?? "—";
+    document.getElementById("patient-gender").textContent = data.patient.gender;
+    document.getElementById("doctor-name").textContent = data.doctor.name;
+    document.getElementById("doctor-department").textContent = data.doctor.department;
+
+    document.getElementById("ocr-text").textContent = data.ocr_text;
+
+    document.getElementById("metric-age").textContent = data.metrics.age;
+    document.getElementById("metric-medcount").textContent = data.metrics.medicine_count;
+    document.getElementById("metric-toxicity").textContent = data.metrics.toxicity_total;
+
+    document.getElementById("confidence-value").textContent = `${data.confidence}%`;
+    document.getElementById("confidence-bar").style.width = `${data.confidence}%`;
+
+    document.getElementById("risk-value").textContent = `${data.risk_score}/100`;
+    document.getElementById("risk-bar").style.width = `${data.risk_score}%`;
+
+    const riskFactorsEl = document.getElementById("risk-factors");
+    riskFactorsEl.innerHTML = "";
+    if (data.risk_factors.length === 0) {
+      const chip = document.createElement("span");
+      chip.className = "chip ok";
+      chip.textContent = "✅ No major risk factors detected";
+      riskFactorsEl.appendChild(chip);
+    } else {
+      data.risk_factors.forEach((factor) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = `⚠ ${factor}`;
+        riskFactorsEl.appendChild(chip);
+      });
+    }
+
+    const verdictBanner = document.getElementById("verdict-banner");
+    const verdictIcon = document.getElementById("verdict-icon");
+    const verdictTitle = document.getElementById("verdict-title");
+    const verdictSubtitle = document.getElementById("verdict-subtitle");
+
+    if (data.requires_verification) {
+      verdictBanner.classList.add("danger");
+      verdictIcon.textContent = "🚨";
+      verdictTitle.textContent = "VERIFICATION REQUIRED";
+      verdictSubtitle.textContent = "Doctor/Hospital verification required before dispensing.";
+    } else {
+      verdictBanner.classList.remove("danger");
+      verdictIcon.textContent = "✅";
+      verdictTitle.textContent = "SAFE TO DISPENSE";
+      verdictSubtitle.textContent = "Medicine can be dispensed safely.";
+    }
+
+    const table = document.getElementById("feature-table");
+    table.innerHTML = "";
+    const headerRow = document.createElement("tr");
+    const valueRow = document.createElement("tr");
+    Object.entries(data.feature_data).forEach(([key, value]) => {
+      const th = document.createElement("th");
+      th.textContent = key;
+      headerRow.appendChild(th);
+
+      const td = document.createElement("td");
+      td.textContent = value;
+      valueRow.appendChild(td);
+    });
+    table.appendChild(headerRow);
+    table.appendChild(valueRow);
+
+    errorBanner.classList.add("hidden");
+    results.classList.remove("hidden");
+  }
+
+  analyzeBtn.addEventListener("click", async () => {
+    if (!selectedFile) return;
+
+    setLoading(true);
+    resetResults();
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        let detail = `Request failed with status ${response.status}`;
+        try {
+          const errJson = await response.json();
+          detail = errJson.detail || detail;
+        } catch (_) {
+          /* response body wasn't JSON */
+        }
+        throw new Error(detail);
+      }
+
+      const data = await response.json();
+      analyzedFileKey = fileKey(selectedFile);
+      renderResults(data);
+    } catch (err) {
+      showError(err.message || String(err));
+    } finally {
+      setLoading(false);
+    }
+  });
+})();
