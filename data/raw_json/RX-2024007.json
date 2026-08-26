@@ -1,0 +1,25 @@
+{
+    "prescription_id": "RX-2024007",
+    "doctor": {
+        "doctor_name": "Emily Brown",
+        "department": "General Physician"
+    },
+    "patient": {
+        "patient_id": "PT-6557",
+        "name": "",
+        "age": 71,
+        "gender": "M",
+        "existing_conditions": [
+            "Fever with Mild Headache"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "5599cce7-2f7c-4248-aa0f-4ed24339b42e",
+            "name": "Paracetamol",
+            "dosage_mg": 500,
+            "frequency_per_day": 0
+        }
+    ],
+    "raw_text": "MetroGeneral\nDr. Emily Brown - General Physician\nDate: 2026-04-11\nPatient:James Williams\nAge/Sex: 71 / M\nID: PT-6557\nDIAGNOSIS:\nFever with Mild Headache\nRx\nMedicine | Dosage | Frequency | Duration\nParacetamol | 500mg | 1 tablet every 8 hours (if needed)|3 days\nNotes:\nTake tablet after food.\n\u2022 Drink plenty of fluids and rest.\n\u2022 Do not take more than 4 tablets in 24 hours.\n\u2022 If fever persists beyond 3 days or worsens, consult the doctor.\nPrescription ID: RX-2024007\nSigned Electronically\n"
+}

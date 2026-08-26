@@ -1,0 +1,37 @@
+{
+    "prescription_id": "RX-2024005",
+    "doctor": {
+        "doctor_name": "Emily Brown",
+        "department": "Endocrinology"
+    },
+    "patient": {
+        "patient_id": "PT-6557",
+        "name": "",
+        "age": 71,
+        "gender": "M",
+        "existing_conditions": [
+            "Type 2 Diabetes Mellitus",
+            "x",
+            "Medicine | Dosage | Frequency | Duration",
+            "Sertraline | 50mg | 1x daily | 30 days",
+            "Metformin | 500mg | 2x daily (with meals) | 30 days",
+            "Signed Electronically",
+            "Prescription ID: RX-2024005"
+        ]
+    },
+    "medicines": [
+        {
+            "medicine_id": "1e6cf4dd-9aff-4d26-b318-df2e3956e8b9",
+            "name": "Sertraline",
+            "dosage_mg": 50,
+            "frequency_per_day": 1
+        },
+        {
+            "medicine_id": "301b2f27-19bd-41eb-8e65-b6cb0a1915b5",
+            "name": "Metformin",
+            "dosage_mg": 500,
+            "frequency_per_day": 2
+        }
+    ],
+    "raw_text": "MetroGeneral\nDr. Emily Brown - Endocrinology\nPatient: James Williams\nDate: 2026-04-11\nAge/Sex: 71/M\nID: PT-6557\nDIAGNOSIS:\nType 2 Diabetes Mellitus\nx\nMedicine | Dosage | Frequency | Duration\nSertraline | 50mg | 1x daily | 30 days\nMetformin | 500mg | 2x daily (with meals) | 30 days\nSigned Electronically\nPrescription ID: RX-2024005\n"
+}
