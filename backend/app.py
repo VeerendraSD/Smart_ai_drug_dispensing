@@ -170,9 +170,29 @@ async def analyze_prescription(file: UploadFile = File(...)):
 
     row = feature_df.iloc[0]
 
+    # ---- unknown medicine check ----
+    # "unknown_medicine_present"/"unknown_medicine_names" describe medicines
+    # preprocessing couldn't match in drug_risk_database.csv (even after
+    # OCR-tolerant normalization). They are NOT part of the model's trained
+    # feature set, so they must be dropped before prediction — but they
+    # still have to override the final verdict below, since an unmatched
+    # medicine must never be silently treated as safe just because it
+    # contributed no risk features.
+    unknown_medicine_present = bool(row.get("unknown_medicine_present", 0))
+    unknown_medicine_names = [
+        name.strip()
+        for name in str(row.get("unknown_medicine_names", "") or "").split(";")
+        if name.strip()
+    ]
+
     # ---- run the model ----
     model = joblib.load(MODEL_PATH)
-    X = feature_df.drop("requires_verification", axis=1, errors="ignore")
+    NON_FEATURE_COLUMNS = [
+        "requires_verification",
+        "unknown_medicine_present",
+        "unknown_medicine_names",
+    ]
+    X = feature_df.drop(NON_FEATURE_COLUMNS, axis=1, errors="ignore")
     prediction = model.predict(X)
     probability = model.predict_proba(X)
 
@@ -180,6 +200,10 @@ async def analyze_prescription(file: UploadFile = File(...)):
     risk_score = round(float(probability[0][1]) * 100, 2)
 
     risk_factors = []
+    if unknown_medicine_present:
+        risk_factors.append(
+            "Medicine Not Found: " + ", ".join(unknown_medicine_names)
+        )
     if row["high_risk_present"] == 1:
         risk_factors.append("High Risk Drug Present")
     if row["interaction_risk_present"] == 1:
@@ -192,6 +216,11 @@ async def analyze_prescription(file: UploadFile = File(...)):
         risk_factors.append("Elderly Patient")
     if row["high_dosage"] == 1:
         risk_factors.append("High Dosage Prescription")
+
+    # An unmatched medicine must always require manual verification,
+    # regardless of what the model predicted from the medicines it did
+    # recognize — never let it fall through as "safe".
+    requires_verification = bool(prediction[0] == 1) or unknown_medicine_present
 
     patient = prescription_data.get("patient", {})
     doctor = prescription_data.get("doctor", {})
@@ -215,6 +244,8 @@ async def analyze_prescription(file: UploadFile = File(...)):
         "risk_factors": risk_factors,
         "confidence": confidence,
         "risk_score": risk_score,
-        "requires_verification": bool(prediction[0] == 1),
+        "requires_verification": requires_verification,
+        "unknown_medicine_present": unknown_medicine_present,
+        "unknown_medicine_names": unknown_medicine_names,
         "feature_data": json.loads(feature_df.to_json(orient="records"))[0],
     }

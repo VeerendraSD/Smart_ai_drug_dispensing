@@ -132,7 +132,15 @@
     const verdictTitle = document.getElementById("verdict-title");
     const verdictSubtitle = document.getElementById("verdict-subtitle");
 
-    if (data.requires_verification) {
+    if (data.unknown_medicine_present) {
+      verdictBanner.classList.add("danger");
+      verdictIcon.textContent = "🚨";
+      verdictTitle.textContent = "MEDICINE NOT FOUND";
+      verdictSubtitle.textContent =
+        "Unrecognized medicine(s) — " +
+        (data.unknown_medicine_names || []).join(", ") +
+        " — manual verification required before dispensing.";
+    } else if (data.requires_verification) {
       verdictBanner.classList.add("danger");
       verdictIcon.textContent = "🚨";
       verdictTitle.textContent = "VERIFICATION REQUIRED";

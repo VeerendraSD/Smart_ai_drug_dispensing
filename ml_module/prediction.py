@@ -31,8 +31,18 @@ df = pd.read_csv(
     os.path.join(PROJECT_ROOT, "data", "processed", "feature_dataset.csv")
 )
 
-X = df.drop(
+# "unknown_medicine_present"/"unknown_medicine_names" describe medicines
+# missing from the drug-risk database and, like "requires_verification",
+# are not part of the model's trained feature set — they must be dropped
+# before prediction, not fed to the model.
+NON_FEATURE_COLUMNS = [
     "requires_verification",
+    "unknown_medicine_present",
+    "unknown_medicine_names",
+]
+
+X = df.drop(
+    NON_FEATURE_COLUMNS,
     axis=1,
     errors="ignore"
 )
@@ -44,10 +54,31 @@ X = df.drop(
 prediction = model.predict(X)
 
 # -----------------------------
+# UNKNOWN MEDICINE CHECK
+# -----------------------------
+
+# A medicine missing from the drug-risk database must never be treated as
+# safe just because the model didn't see it — force verification instead
+# of trusting the prediction.
+unknown_medicine_present = bool(
+    df.get("unknown_medicine_present", pd.Series([0])).iloc[0]
+)
+
+# -----------------------------
 # DECISION
 # -----------------------------
 
-if prediction[0] == 1:
+if unknown_medicine_present:
+
+    unknown_names = df.get(
+        "unknown_medicine_names", pd.Series([""])
+    ).iloc[0]
+
+    print("\n⚠ MEDICINE NOT FOUND")
+    print(f"Unrecognized medicine(s): {unknown_names}")
+    print("Manual verification required before dispensing.")
+
+elif prediction[0] == 1:
 
     print("\n⚠ HIGH RISK PRESCRIPTION")
     print("Contact hospital for verification.")

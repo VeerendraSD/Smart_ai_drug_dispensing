@@ -1,7 +1,9 @@
 import json
 import pandas as pd
 import os
+import re
 import sys
+import difflib
 
 
 # =====================================
@@ -105,6 +107,34 @@ drug_db = pd.read_csv(
 
 
 # =====================================
+# NAME NORMALIZATION (for OCR-tolerant matching)
+# =====================================
+
+def normalize_medicine_name(name):
+    """Normalize a medicine name for matching so minor OCR artifacts
+    (extra/irregular spacing, inconsistent capitalization, stray
+    punctuation) don't cause a real match to be missed."""
+
+    name = str(name).strip().lower()
+
+    # Collapse any run of whitespace to a single space.
+    name = re.sub(r"\s+", " ", name)
+
+    # Drop characters that aren't letters, digits or spaces (OCR noise
+    # like stray periods/commas/pipes that leak in from the source image).
+    name = re.sub(r"[^a-z0-9 ]", "", name)
+
+    return name.strip()
+
+
+drug_db["_normalized_name"] = drug_db["medicine_name"].apply(
+    normalize_medicine_name
+)
+
+_KNOWN_NORMALIZED_NAMES = drug_db["_normalized_name"].tolist()
+
+
+# =====================================
 # BASIC FEATURES
 # =====================================
 
@@ -156,6 +186,13 @@ dose_ratio_total = 0
 
 max_dose_ratio = 0
 
+# Medicines that could not be matched to any row in drug_risk_database.csv,
+# even after OCR-tolerant normalization/fuzzy matching. These must NEVER be
+# treated as "safe" or contribute a default/zero risk value silently — they
+# are flagged below and force manual verification regardless of the
+# computed risk score.
+unmatched_medicines = []
+
 
 # =====================================
 # MATCH MEDICINES
@@ -165,24 +202,44 @@ for med in data["medicines"]:
 
     med_name = med["name"]
 
+    normalized_name = normalize_medicine_name(med_name)
+
     matched = drug_db[
-        drug_db["medicine_name"]
-        .str.lower()
-        ==
-        med_name.lower()
+        drug_db["_normalized_name"] == normalized_name
     ]
 
     if matched.empty:
 
-        # An unmatched medicine contributes no toxicity/risk flags at all,
-        # which can silently understate risk. This isn't fatal (the drug
-        # database may just be incomplete), but it must be visible rather
-        # than a silent no-op.
+        # Exact normalized match failed — allow a close fuzzy match to
+        # absorb minor OCR misreads (e.g. a dropped/substituted letter),
+        # but keep the cutoff strict so genuinely different drug names
+        # are never silently merged.
+        close_matches = difflib.get_close_matches(
+            normalized_name,
+            _KNOWN_NORMALIZED_NAMES,
+            n=1,
+            cutoff=0.85
+        )
+
+        if close_matches:
+            matched = drug_db[
+                drug_db["_normalized_name"] == close_matches[0]
+            ]
+
+    if matched.empty:
+
+        # An unmatched medicine must not silently contribute zero
+        # toxicity/risk flags as if it were known-safe — the drug database
+        # may simply be incomplete, or OCR may have mangled the name
+        # beyond recognition. Either way this must be visible and force
+        # manual verification, never a silent no-op.
         print(
             f"WARNING: '{med_name}' not found in drug_risk_database.csv "
-            "— it will not contribute to risk scoring.",
+            "— flagging as unknown medicine requiring manual verification.",
             file=sys.stderr
         )
+
+        unmatched_medicines.append(med_name)
 
     else:
 
@@ -293,10 +350,25 @@ if max_dose_ratio > 0.8:
 
 
 # =====================================
+# UNKNOWN MEDICINE FLAG
+# =====================================
+
+unknown_medicine_present = (
+    1
+    if unmatched_medicines
+    else 0
+)
+
+
+# =====================================
 # TARGET
 # =====================================
 
-if risk_score >= 4:
+# A medicine that couldn't be matched to the drug-risk database must never
+# be treated as safe just because it added nothing to risk_score — force
+# manual verification whenever any medicine is unknown, regardless of the
+# score computed from the medicines that WERE matched.
+if risk_score >= 4 or unknown_medicine_present == 1:
 
     requires_verification = 1
 
@@ -355,6 +427,18 @@ features = {
             max_dose_ratio,
             3
         ),
+
+    # NOTE: these two columns describe medicines the drug-risk database has
+    # no entry for. They are NOT part of the model's trained feature set —
+    # callers (e.g. the backend API) must drop them before calling
+    # model.predict(), exactly like "requires_verification" — and are only
+    # here so downstream code can detect an unknown medicine and force
+    # manual verification instead of trusting the model's prediction.
+    "unknown_medicine_present":
+        unknown_medicine_present,
+
+    "unknown_medicine_names":
+        "; ".join(unmatched_medicines),
 }
 
 
