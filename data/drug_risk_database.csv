@@ -19,3 +19,243 @@ Lithium,Lithium,Mood Stabilizer,1800,1,1,10,Prescription,1,1,1
 Levothyroxine,Levothyroxine,Hormone,300,0,0,5,Prescription,0,0,0
 Diazepam,Diazepam,Sedative,40,1,1,9,Schedule H1,1,1,1
 Tramadol,Tramadol,Opioid,400,1,1,8,Schedule H1,1,1,1
+Naproxen,Naproxen,NSAID,1000,0,0,4,Prescription,0,1,0
+Diclofenac,Diclofenac,NSAID,150,0,0,5,Prescription,0,1,0
+Aspirin,Acetylsalicylic acid,Antiplatelet/NSAID,4000,0,0,4,OTC,0,1,0
+Celecoxib,Celecoxib,NSAID,400,0,0,4,Prescription,0,1,0
+Ketorolac,Ketorolac,NSAID,40,0,1,7,Prescription,1,1,0
+Meloxicam,Meloxicam,NSAID,15,0,0,4,Prescription,0,1,0
+Etoricoxib,Etoricoxib,NSAID,120,0,0,4,Prescription,0,1,0
+Aceclofenac,Aceclofenac,NSAID,200,0,0,4,Prescription,0,1,0
+Codeine,Codeine,Opioid analgesic,240,1,1,9,Schedule H1,1,1,1
+Buprenorphine,Buprenorphine,Opioid,32,1,1,9,Schedule H,1,1,1
+Oxycodone,Oxycodone,Opioid,160,1,1,10,Schedule X,1,1,1
+Hydromorphone,Hydromorphone,Opioid,32,1,1,10,Schedule X,1,1,1
+Methadone,Methadone,Opioid,120,1,1,10,Schedule X,1,1,1
+Cefixime,Cefixime,Antibiotic,800,0,0,3,Prescription,0,1,0
+Cefuroxime,Cefuroxime,Antibiotic,1000,0,0,4,Prescription,0,1,0
+Ceftriaxone,Ceftriaxone,Antibiotic,4000,0,0,4,Prescription,0,1,0
+Cefpodoxime,Cefpodoxime,Antibiotic,400,0,0,3,Prescription,0,1,0
+Cephalexin,Cephalexin,Antibiotic,4000,0,0,3,Prescription,0,1,0
+Ciprofloxacin,Ciprofloxacin,Antibiotic,1500,0,1,6,Prescription,1,1,1
+Levofloxacin,Levofloxacin,Antibiotic,750,0,1,6,Prescription,1,1,1
+Moxifloxacin,Moxifloxacin,Antibiotic,400,0,1,6,Prescription,1,1,1
+Doxycycline,Doxycycline,Antibiotic,200,0,0,4,Prescription,0,1,0
+Minocycline,Minocycline,Antibiotic,200,0,0,4,Prescription,0,1,0
+Clindamycin,Clindamycin,Antibiotic,1800,0,1,6,Prescription,1,1,0
+Metronidazole,Metronidazole,Antibiotic,2000,0,0,4,Prescription,0,1,0
+Tinidazole,Tinidazole,Antibiotic,2000,0,0,4,Prescription,0,1,0
+Linezolid,Linezolid,Antibiotic,1200,0,1,7,Prescription,1,1,1
+Nitrofurantoin,Nitrofurantoin,Antibiotic,400,0,0,4,Prescription,0,1,0
+Rifampicin,Rifampin,Antitubercular,600,0,1,7,Prescription,1,1,0
+Isoniazid,Isoniazid,Antitubercular,300,0,1,7,Prescription,1,1,1
+Ethambutol,Ethambutol,Antitubercular,1600,0,1,6,Prescription,1,1,0
+Pyrazinamide,Pyrazinamide,Antitubercular,2000,0,1,7,Prescription,1,1,0
+Vancomycin,Vancomycin,Glycopeptide antibiotic,4000,0,1,8,Prescription,1,1,1
+Meropenem,Meropenem,Antibiotic,6000,0,1,7,Prescription,1,1,0
+Piperacillin,Piperacillin,Antibiotic,14000,0,1,7,Prescription,1,1,0
+Clavulanic acid,Clavulanic acid,Beta-lactamase inhibitor,1250,0,0,3,Prescription,0,1,0
+Pantoprazole,Pantoprazole,PPI,80,0,0,1,Prescription,0,0,0
+Esomeprazole,Esomeprazole,PPI,80,0,0,1,Prescription,0,0,0
+Lansoprazole,Lansoprazole,PPI,60,0,0,1,Prescription,0,0,0
+Rabeprazole,Rabeprazole,PPI,40,0,0,1,Prescription,0,0,0
+Famotidine,Famotidine,H2 blocker,80,0,0,2,Prescription,0,1,0
+Ondansetron,Ondansetron,Antiemetic,24,0,0,3,Prescription,0,1,0
+Domperidone,Domperidone,Prokinetic,30,0,1,5,Prescription,1,1,1
+Metoclopramide,Metoclopramide,Antiemetic,40,0,1,5,Prescription,1,1,1
+Loperamide,Loperamide,Antidiarrheal,16,0,0,3,OTC,0,1,1
+Bisacodyl,Bisacodyl,Laxative,30,0,0,2,OTC,0,0,0
+Lactulose,Lactulose,Laxative,120,0,0,2,Prescription,0,0,0
+Sucralfate,Sucralfate,Gastroprotective,4000,0,0,2,Prescription,0,1,0
+Mesalamine,Mesalamine,Aminosalicylate,4800,0,1,5,Prescription,1,1,0
+Glimepiride,Glimepiride,Sulfonylurea,8,0,1,6,Prescription,1,1,0
+Gliclazide,Gliclazide,Sulfonylurea,320,0,1,6,Prescription,1,1,0
+Glipizide,Glipizide,Sulfonylurea,40,0,1,6,Prescription,1,1,0
+Pioglitazone,Pioglitazone,Thiazolidinedione,45,0,1,5,Prescription,1,1,1
+Sitagliptin,Sitagliptin,DPP-4 inhibitor,100,0,0,3,Prescription,0,1,0
+Vildagliptin,Vildagliptin,DPP-4 inhibitor,100,0,0,3,Prescription,0,1,0
+Linagliptin,Linagliptin,DPP-4 inhibitor,5,0,0,3,Prescription,0,1,0
+Saxagliptin,Saxagliptin,DPP-4 inhibitor,5,0,0,3,Prescription,0,1,0
+Empagliflozin,Empagliflozin,SGLT2 inhibitor,25,0,1,5,Prescription,1,1,0
+Dapagliflozin,Dapagliflozin,SGLT2 inhibitor,10,0,1,5,Prescription,1,1,0
+Canagliflozin,Canagliflozin,SGLT2 inhibitor,300,0,1,5,Prescription,1,1,1
+Acarbose,Acarbose,Alpha-glucosidase inhibitor,300,0,0,3,Prescription,0,1,0
+Repaglinide,Repaglinide,Meglitinide,16,0,1,5,Prescription,1,1,0
+Semaglutide,Semaglutide,GLP-1 receptor agonist,2.4,0,1,5,Prescription,1,1,0
+Liraglutide,Liraglutide,GLP-1 receptor agonist,1.8,0,1,5,Prescription,1,1,0
+Insulin glargine,Insulin glargine,Insulin,100,1,1,9,Prescription,1,1,1
+Insulin lispro,Insulin lispro,Insulin,100,1,1,9,Prescription,1,1,1
+Insulin aspart,Insulin aspart,Insulin,100,1,1,9,Prescription,1,1,1
+Amlodipine,Amlodipine,Calcium channel blocker,10,0,0,2,Prescription,0,1,0
+Nifedipine,Nifedipine,Calcium channel blocker,180,0,0,3,Prescription,0,1,0
+Diltiazem,Diltiazem,Calcium channel blocker,360,0,1,5,Prescription,1,1,0
+Verapamil,Verapamil,Calcium channel blocker,480,0,1,6,Prescription,1,1,0
+Losartan,Losartan,ARB,100,0,0,2,Prescription,0,1,0
+Valsartan,Valsartan,ARB,320,0,0,2,Prescription,0,1,0
+Telmisartan,Telmisartan,ARB,80,0,0,2,Prescription,0,1,0
+Olmesartan,Olmesartan,ARB,40,0,0,2,Prescription,0,1,0
+Irbesartan,Irbesartan,ARB,300,0,0,2,Prescription,0,1,0
+Candesartan,Candesartan,ARB,32,0,0,2,Prescription,0,1,0
+Enalapril,Enalapril,ACE inhibitor,40,0,0,3,Prescription,0,1,0
+Lisinopril,Lisinopril,ACE inhibitor,80,0,0,3,Prescription,0,1,0
+Ramipril,Ramipril,ACE inhibitor,20,0,0,3,Prescription,0,1,0
+Perindopril,Perindopril,ACE inhibitor,16,0,0,3,Prescription,0,1,0
+Atenolol,Atenolol,Beta blocker,100,0,0,3,Prescription,0,1,0
+Metoprolol,Metoprolol,Beta blocker,400,0,1,5,Prescription,1,1,0
+Propranolol,Propranolol,Beta blocker,640,0,1,5,Prescription,1,1,0
+Bisoprolol,Bisoprolol,Beta blocker,20,0,0,3,Prescription,0,1,0
+Carvedilol,Carvedilol,Beta blocker,50,0,1,5,Prescription,1,1,0
+Furosemide,Furosemide,Loop diuretic,600,0,1,6,Prescription,1,1,0
+Torsemide,Torsemide,Loop diuretic,200,0,1,6,Prescription,1,1,0
+Hydrochlorothiazide,Hydrochlorothiazide,Thiazide diuretic,200,0,0,4,Prescription,1,1,0
+Spironolactone,Spironolactone,Potassium-sparing diuretic,400,0,1,6,Prescription,1,1,1
+Chlorthalidone,Chlorthalidone,Thiazide-like diuretic,100,0,0,4,Prescription,1,1,0
+Clopidogrel,Clopidogrel,Antiplatelet,75,0,1,5,Prescription,1,1,0
+Ticagrelor,Ticagrelor,Antiplatelet,180,0,1,6,Prescription,1,1,0
+Prasugrel,Prasugrel,Antiplatelet,10,0,1,6,Prescription,1,1,1
+Apixaban,Apixaban,Anticoagulant,10,0,1,9,Prescription,1,1,1
+Rivaroxaban,Rivaroxaban,Anticoagulant,30,0,1,9,Prescription,1,1,1
+Dabigatran,Dabigatran,Anticoagulant,300,0,1,9,Prescription,1,1,1
+Enoxaparin,Enoxaparin,Anticoagulant,180,0,1,9,Prescription,1,1,1
+Atorvastatin,Atorvastatin,Statin,80,0,0,3,Prescription,1,1,0
+Rosuvastatin,Rosuvastatin,Statin,40,0,0,3,Prescription,1,1,0
+Simvastatin,Simvastatin,Statin,40,0,0,4,Prescription,1,1,0
+Pravastatin,Pravastatin,Statin,80,0,0,3,Prescription,1,1,0
+Fenofibrate,Fenofibrate,Fibrate,145,0,1,5,Prescription,1,1,0
+Ezetimibe,Ezetimibe,Lipid-lowering,10,0,0,2,Prescription,0,1,0
+Methylprednisolone,Methylprednisolone,Corticosteroid,48,0,1,7,Prescription,1,1,1
+Hydrocortisone,Hydrocortisone,Corticosteroid,240,0,1,6,Prescription,1,1,1
+Budesonide,Budesonide,Corticosteroid,9,0,1,5,Prescription,1,1,0
+Deflazacort,Deflazacort,Corticosteroid,90,0,1,7,Prescription,1,1,0
+Methimazole,Methimazole,Antithyroid,60,0,1,6,Prescription,1,1,1
+Propylthiouracil,Propylthiouracil,Antithyroid,600,0,1,8,Prescription,1,1,1
+Alprazolam,Alprazolam,Benzodiazepine,4,1,1,9,Schedule H1,1,1,1
+Lorazepam,Lorazepam,Benzodiazepine,10,1,1,9,Schedule H1,1,1,1
+Clonazepam,Clonazepam,Benzodiazepine,20,1,1,9,Schedule H1,1,1,1
+Midazolam,Midazolam,Benzodiazepine,60,1,1,9,Schedule H1,1,1,1
+Zolpidem,Zolpidem,Sedative-hypnotic,10,1,1,7,Schedule H,1,1,1
+Fluoxetine,Fluoxetine,SSRI,80,0,1,5,Prescription,1,1,1
+Sertraline,Sertraline,SSRI,200,0,1,5,Prescription,1,1,1
+Escitalopram,Escitalopram,SSRI,20,0,1,5,Prescription,1,1,1
+Citalopram,Citalopram,SSRI,40,0,1,6,Prescription,1,1,1
+Paroxetine,Paroxetine,SSRI,60,0,1,5,Prescription,1,1,1
+Venlafaxine,Venlafaxine,SNRI,375,0,1,6,Prescription,1,1,1
+Duloxetine,Duloxetine,SNRI,120,0,1,5,Prescription,1,1,1
+Amitriptyline,Amitriptyline,Tricyclic antidepressant,300,0,1,8,Prescription,1,1,1
+Nortriptyline,Nortriptyline,Tricyclic antidepressant,150,0,1,7,Prescription,1,1,1
+Mirtazapine,Mirtazapine,Antidepressant,45,0,1,5,Prescription,1,1,0
+Bupropion,Bupropion,Antidepressant,450,0,1,6,Prescription,1,1,1
+Quetiapine,Quetiapine,Antipsychotic,800,0,1,8,Prescription,1,1,1
+Risperidone,Risperidone,Antipsychotic,16,0,1,7,Prescription,1,1,1
+Olanzapine,Olanzapine,Antipsychotic,20,0,1,7,Prescription,1,1,1
+Aripiprazole,Aripiprazole,Antipsychotic,30,0,1,6,Prescription,1,1,1
+Haloperidol,Haloperidol,Antipsychotic,20,0,1,8,Prescription,1,1,1
+Sodium valproate,Valproate,Anticonvulsant,3000,0,1,8,Prescription,1,1,1
+Carbamazepine,Carbamazepine,Anticonvulsant,1600,0,1,8,Prescription,1,1,1
+Phenytoin,Phenytoin,Anticonvulsant,600,0,1,8,Prescription,1,1,1
+Levetiracetam,Levetiracetam,Anticonvulsant,3000,0,1,5,Prescription,1,1,0
+Lamotrigine,Lamotrigine,Anticonvulsant,500,0,1,7,Prescription,1,1,1
+Topiramate,Topiramate,Anticonvulsant,400,0,1,6,Prescription,1,1,0
+Baclofen,Baclofen,Muscle relaxant,80,0,1,6,Prescription,1,1,0
+Tizanidine,Tizanidine,Muscle relaxant,36,0,1,6,Prescription,1,1,0
+Carbidopa/Levodopa,Levodopa/Carbidopa,Antiparkinsonian,2000,0,1,5,Prescription,1,1,0
+Pramipexole,Pramipexole,Dopamine agonist,4.5,0,1,5,Prescription,1,1,0
+Sumatriptan,Sumatriptan,Antimigraine,300,0,1,5,Prescription,1,1,1
+Cetirizine,Cetirizine,Antihistamine,10,0,0,2,OTC,0,0,0
+Levocetirizine,Levocetirizine,Antihistamine,5,0,0,2,OTC,0,0,0
+Loratadine,Loratadine,Antihistamine,10,0,0,2,OTC,0,0,0
+Fexofenadine,Fexofenadine,Antihistamine,180,0,0,2,OTC,0,0,0
+Chlorpheniramine,Chlorpheniramine,Antihistamine,24,0,0,3,OTC,0,1,0
+Diphenhydramine,Diphenhydramine,Antihistamine,300,0,1,5,OTC,1,1,0
+Montelukast,Montelukast,Leukotriene antagonist,10,0,0,3,Prescription,0,1,0
+Salbutamol,Albuterol,Bronchodilator,32,0,1,4,Prescription,1,1,0
+Formoterol,Formoterol,Bronchodilator,48,0,1,5,Prescription,1,1,0
+Salmeterol,Salmeterol,Bronchodilator,100,0,1,5,Prescription,1,1,0
+Budesonide/Formoterol,Budesonide/Formoterol,ICS/LABA,640,0,1,5,Prescription,1,1,0
+Fluticasone,Fluticasone,Corticosteroid,1,0,1,4,Prescription,1,1,0
+Theophylline,Theophylline,Bronchodilator,600,0,1,7,Prescription,1,1,1
+Ipratropium,Ipratropium,Anticholinergic bronchodilator,320,0,0,3,Prescription,0,1,0
+Ambroxol,Ambroxol,Mucolytic,180,0,0,2,Prescription,0,0,0
+Acetylcysteine,Acetylcysteine,Mucolytic,1200,0,0,3,Prescription,0,1,0
+Dextromethorphan,Dextromethorphan,Antitussive,120,0,1,5,OTC,1,1,0
+Guaifenesin,Guaifenesin,Expectorant,2400,0,0,2,OTC,0,0,0
+Tamsulosin,Tamsulosin,Alpha blocker,0.8,0,1,4,Prescription,1,1,0
+Finasteride,Finasteride,5-alpha reductase inhibitor,5,0,0,3,Prescription,0,1,0
+Sildenafil,Sildenafil,PDE5 inhibitor,100,0,1,5,Prescription,1,1,0
+Tadalafil,Tadalafil,PDE5 inhibitor,40,0,1,5,Prescription,1,1,0
+Allopurinol,Allopurinol,Xanthine oxidase inhibitor,800,0,1,5,Prescription,1,1,1
+Febuxostat,Febuxostat,Xanthine oxidase inhibitor,80,0,1,5,Prescription,1,1,1
+Colchicine,Colchicine,Anti-gout,2.4,0,1,8,Prescription,1,1,1
+Hydroxychloroquine,Hydroxychloroquine,Antimalarial/DMARD,600,0,1,7,Prescription,1,1,1
+Sulfasalazine,Sulfasalazine,DMARD,3000,0,1,6,Prescription,1,1,0
+Methotrexate,Methotrexate,Immunosuppressant,25,0,1,10,Prescription,1,1,1
+Azathioprine,Azathioprine,Immunosuppressant,250,0,1,9,Prescription,1,1,1
+Mycophenolate mofetil,Mycophenolate,Immunosuppressant,3000,0,1,9,Prescription,1,1,1
+Tacrolimus,Tacrolimus,Immunosuppressant,20,0,1,10,Prescription,1,1,1
+Cyclosporine,Cyclosporine,Immunosuppressant,600,0,1,10,Prescription,1,1,1
+Fluconazole,Fluconazole,Antifungal,800,0,1,6,Prescription,1,1,1
+Itraconazole,Itraconazole,Antifungal,600,0,1,7,Prescription,1,1,1
+Ketoconazole,Ketoconazole,Antifungal,400,0,1,8,Prescription,1,1,1
+Acyclovir,Acyclovir,Antiviral,4000,0,0,4,Prescription,0,1,0
+Valacyclovir,Valacyclovir,Antiviral,3000,0,0,4,Prescription,0,1,0
+Oseltamivir,Oseltamivir,Antiviral,150,0,0,3,Prescription,0,1,0
+Albendazole,Albendazole,Anthelmintic,800,0,0,3,Prescription,0,0,0
+Mebendazole,Mebendazole,Anthelmintic,100,0,0,2,OTC,0,0,0
+Ivermectin,Ivermectin,Antiparasitic,24,0,0,4,Prescription,0,1,0
+Praziquantel,Praziquantel,Anthelmintic,300,0,0,4,Prescription,0,1,0
+Vitamin D3,Cholecalciferol,Vitamin,4,0,0,2,OTC,0,0,0
+Calcium carbonate,Calcium carbonate,Mineral supplement,6000,0,0,2,OTC,0,1,0
+Ferrous sulfate,Ferrous sulfate,Iron supplement,600,0,0,3,OTC,0,1,0
+Folic acid,Folic acid,Vitamin,5,0,0,1,OTC,0,0,0
+Vitamin B12,Cyanocobalamin,Vitamin,2,0,0,1,OTC,0,0,0
+Magnesium oxide,Magnesium oxide,Mineral supplement,800,0,0,2,OTC,0,1,0
+Mupirocin,Mupirocin,Topical antibiotic,0,0,0,2,Prescription,0,0,0
+Clotrimazole,Clotrimazole,Antifungal,0,0,0,2,OTC,0,0,0
+Betamethasone,Betamethasone,Corticosteroid,8,0,1,6,Prescription,1,1,0
+Povidone-iodine,Povidone iodine,Antiseptic,0,0,0,1,OTC,0,0,0
+Chlorhexidine,Chlorhexidine,Antiseptic,0,0,0,2,OTC,0,0,0
+Timolol,Timolol,Ophthalmic beta blocker,40,0,1,5,Prescription,1,1,0
+Latanoprost,Latanoprost,Ophthalmic prostaglandin,0.0001,0,0,2,Prescription,0,0,0
+Acetazolamide,Acetazolamide,Carbonic anhydrase inhibitor,1000,0,1,5,Prescription,1,1,0
+Tranexamic acid,Tranexamic acid,Antifibrinolytic,4000,0,1,7,Prescription,1,1,0
+Digoxin,Digoxin,Cardiac glycoside,0.5,0,1,10,Prescription,1,1,1
+Amiodarone,Amiodarone,Antiarrhythmic,800,0,1,9,Prescription,1,1,1
+Sotalol,Sotalol,Antiarrhythmic,320,0,1,8,Prescription,1,1,1
+Ivabradine,Ivabradine,Heart-rate lowering,15,0,1,5,Prescription,1,1,0
+Isosorbide mononitrate,Isosorbide mononitrate,Nitrate,240,0,1,5,Prescription,1,1,0
+Hydralazine,Hydralazine,Antihypertensive,300,0,1,5,Prescription,1,1,0
+Clonidine,Clonidine,Antihypertensive,2.4,0,1,6,Prescription,1,1,0
+Methyldopa,Methyldopa,Antihypertensive,3000,0,1,6,Prescription,1,1,0
+Minoxidil,Minoxidil,Antihypertensive,100,0,1,7,Prescription,1,1,0
+Tamoxifen,Tamoxifen,SERM,40,0,1,7,Prescription,1,1,1
+Anastrozole,Anastrozole,Aromatase inhibitor,1,0,1,5,Prescription,1,1,0
+Letrozole,Letrozole,Aromatase inhibitor,2.5,0,1,5,Prescription,1,1,0
+Imatinib,Imatinib,Tyrosine kinase inhibitor,800,0,1,8,Prescription,1,1,1
+Hydroxyurea,Hydroxyurea,Antineoplastic,2000,0,1,9,Prescription,1,1,1
+Capecitabine,Capecitabine,Antineoplastic,5000,0,1,9,Prescription,1,1,1
+Aprepitant,Aprepitant,Antiemetic,125,0,1,5,Prescription,1,1,0
+Dicyclomine,Dicyclomine,Antispasmodic,160,0,0,3,Prescription,0,1,0
+Hyoscine butylbromide,Hyoscine butylbromide,Antispasmodic,100,0,0,3,OTC,0,1,0
+Simethicone,Simethicone,Antiflatulent,500,0,0,1,OTC,0,0,0
+Polyethylene glycol,Polyethylene glycol,Laxative,34,0,0,2,OTC,0,0,0
+Senna,Sennosides,Laxative,100,0,0,2,OTC,0,0,0
+Psyllium,Psyllium,Bulk laxative,30,0,0,1,OTC,0,0,0
+Cefepime,Cefepime,Antibiotic,6000,0,1,7,Prescription,1,1,0
+Amikacin,Amikacin,Aminoglycoside antibiotic,1500,0,1,9,Prescription,1,1,1
+Gentamicin,Gentamicin,Aminoglycoside antibiotic,480,0,1,9,Prescription,1,1,1
+Tobramycin,Tobramycin,Aminoglycoside antibiotic,480,0,1,9,Prescription,1,1,1
+Clarithromycin,Clarithromycin,Antibiotic,1000,0,1,6,Prescription,1,1,1
+Co-amoxiclav,Amoxicillin/clavulanate,Antibiotic,4000,0,0,4,Prescription,0,1,0
+Dapsone,Dapsone,Antibiotic,100,0,1,7,Prescription,1,1,1
+Nitazoxanide,Nitazoxanide,Antiprotozoal,1000,0,0,3,Prescription,0,1,0
+Rifaximin,Rifaximin,Antibiotic,1650,0,0,3,Prescription,0,1,0
+Benzoyl peroxide,Benzoyl peroxide,Topical dermatologic,0,0,0,1,OTC,0,0,0
+Adapalene,Adapalene,Topical retinoid,0,0,0,2,Prescription,0,0,0
+Isotretinoin,Isotretinoin,Retinoid,2,0,1,9,Prescription,1,1,1
+Permethrin,Permethrin,Antiparasitic,0,0,0,2,OTC,0,0,0
+Artemether/Lumefantrine,Artemether/Lumefantrine,Antimalarial,0,0,1,6,Prescription,1,1,1
+Ranitidine,Ranitidine,H2 blocker,300,0,0,2,Prescription,0,1,0
+Magaldrate,Magaldrate,Antacid,3200,0,0,1,OTC,0,0,0
+Aluminium hydroxide,Aluminium hydroxide,Antacid,10000,0,0,2,OTC,0,1,0
+Magnesium hydroxide,Magnesium hydroxide,Antacid,2400,0,0,2,OTC,0,1,0
+Sodium bicarbonate,Sodium bicarbonate,Antacid,6000,0,0,2,OTC,0,1,0
