@@ -24,6 +24,7 @@ from datetime import datetime
 
 import pandas as pd
 import joblib
+import shap
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -57,6 +58,25 @@ PIPELINE_STAGES = [
     ("JSON Generator", project_path("nlp_module", "json_generator.py")),
     ("Feature Engineering", project_path("datascience_module", "preprocessing.py")),
 ]
+
+# Human-readable labels for the model's actual training features, used only
+# to make the per-prediction SHAP explanation (see analyze_prescription)
+# readable in the frontend instead of showing raw column names.
+FEATURE_LABELS = {
+    "age": "Patient Age",
+    "medicine_count": "Number of Medicines",
+    "total_dosage": "Total Dosage (mg)",
+    "has_conditions": "Has Existing Conditions",
+    "elderly": "Elderly Patient",
+    "high_dosage": "High Dosage Prescription",
+    "toxicity_total": "Toxicity Score",
+    "high_risk_present": "High Risk Drug Present",
+    "interaction_risk_present": "Drug Interaction Risk Present",
+    "black_box_present": "Black Box Warning Present",
+    "controlled_substance_present": "Controlled Substance Present",
+    "dose_ratio_total": "Total Dose Ratio (vs. max safe dose)",
+    "max_dose_ratio": "Max Dose Ratio (vs. max safe dose)",
+}
 
 app = FastAPI(title="Smart AI Drug Dispensing System")
 
@@ -211,12 +231,40 @@ async def analyze_prescription(file: UploadFile = File(...)):
         if name.strip()
     ]
 
+    # ---- drug-drug interaction check ----
+    # "drug_interaction_pairs_present"/"drug_interaction_pairs_details"
+    # describe actual pairwise interactions found between the medicines on
+    # THIS prescription (see datascience_module/preprocessing.py) — not the
+    # per-drug "interaction_risk_present" flag above, which only means a
+    # medicine appears on some interaction list at all, regardless of what
+    # it was actually co-prescribed with. Like unknown_medicine_present,
+    # these are NOT part of the model's trained feature set and must be
+    # dropped before prediction, but a MAJOR interaction still has to
+    # override the final verdict below.
+    drug_interaction_pairs_present = bool(row.get("drug_interaction_pairs_present", 0))
+
+    raw_interaction_details = row.get("drug_interaction_pairs_details", "")
+    if pd.isna(raw_interaction_details):
+        raw_interaction_details = ""
+
+    detected_interactions = [
+        detail.strip()
+        for detail in str(raw_interaction_details).split(";")
+        if detail.strip()
+    ]
+
+    major_interaction_present = any(
+        "(major)" in detail for detail in detected_interactions
+    )
+
     # ---- run the model ----
     model = joblib.load(MODEL_PATH)
     NON_FEATURE_COLUMNS = [
         "requires_verification",
         "unknown_medicine_present",
         "unknown_medicine_names",
+        "drug_interaction_pairs_present",
+        "drug_interaction_pairs_details",
     ]
     X = feature_df.drop(NON_FEATURE_COLUMNS, axis=1, errors="ignore")
     prediction = model.predict(X)
@@ -225,11 +273,47 @@ async def analyze_prescription(file: UploadFile = File(...)):
     confidence = round(float(max(probability[0])) * 100, 2)
     risk_score = round(float(probability[0][1]) * 100, 2)
 
+    # ---- per-prediction explanation (SHAP) ----
+    # risk_score above is just the model's output probability — it doesn't
+    # say WHICH features actually drove that specific prediction. SHAP's
+    # TreeExplainer gives an exact, per-instance attribution for tree
+    # ensembles (not an approximation), unlike the model's global
+    # feature_importances_ which would be the same for every prescription
+    # regardless of its actual values. Explanation generation is a nice-to-
+    # have on top of the real prediction above, so a failure here must not
+    # break the response — it degrades to an empty explanation instead.
+    explanation = []
+    try:
+        explainer = shap.TreeExplainer(model)
+        shap_values = explainer.shap_values(X)
+        # shap_values shape is (n_samples, n_features, n_classes) for this
+        # binary RandomForestClassifier; class index 1 is
+        # "requires_verification". [0] selects our single row.
+        per_feature_contribution = shap_values[0, :, 1]
+
+        explanation = sorted(
+            (
+                {
+                    "feature": FEATURE_LABELS.get(col, col),
+                    "value": round(float(X.iloc[0][col]), 3),
+                    "contribution": round(float(contribution), 4),
+                    "direction": "increases_risk" if contribution > 0 else "decreases_risk",
+                }
+                for col, contribution in zip(X.columns, per_feature_contribution)
+            ),
+            key=lambda item: abs(item["contribution"]),
+            reverse=True,
+        )[:5]
+    except Exception as e:
+        print(f"WARNING: failed to compute SHAP explanation: {e}", file=sys.stderr)
+
     risk_factors = []
     if unknown_medicine_present:
         risk_factors.append(
             "Medicine Not Found: " + ", ".join(unknown_medicine_names)
         )
+    for detail in detected_interactions:
+        risk_factors.append("Drug Interaction: " + detail)
     if row["high_risk_present"] == 1:
         risk_factors.append("High Risk Drug Present")
     if row["interaction_risk_present"] == 1:
@@ -243,10 +327,15 @@ async def analyze_prescription(file: UploadFile = File(...)):
     if row["high_dosage"] == 1:
         risk_factors.append("High Dosage Prescription")
 
-    # An unmatched medicine must always require manual verification,
-    # regardless of what the model predicted from the medicines it did
-    # recognize — never let it fall through as "safe".
-    requires_verification = bool(prediction[0] == 1) or unknown_medicine_present
+    # An unmatched medicine, or a major drug-drug interaction between two
+    # medicines that WERE recognized, must always require manual
+    # verification, regardless of what the model predicted — never let
+    # either fall through as "safe".
+    requires_verification = (
+        bool(prediction[0] == 1)
+        or unknown_medicine_present
+        or major_interaction_present
+    )
 
     patient = prescription_data.get("patient", {})
     doctor = prescription_data.get("doctor", {})
@@ -273,6 +362,9 @@ async def analyze_prescription(file: UploadFile = File(...)):
         "requires_verification": requires_verification,
         "unknown_medicine_present": unknown_medicine_present,
         "unknown_medicine_names": unknown_medicine_names,
+        "drug_interaction_pairs_present": drug_interaction_pairs_present,
+        "drug_interactions": detected_interactions,
+        "explanation": explanation,
         "feature_data": json.loads(feature_df.to_json(orient="records"))[0],
     }
 

@@ -51,13 +51,18 @@ df = pd.read_csv(
 )
 
 # "unknown_medicine_present"/"unknown_medicine_names" describe medicines
-# missing from the drug-risk database and, like "requires_verification",
-# are not part of the model's trained feature set — they must be dropped
-# before prediction, not fed to the model.
+# missing from the drug-risk database, and "drug_interaction_pairs_present"/
+# "drug_interaction_pairs_details" describe pairwise interactions between
+# medicines that WERE matched (see datascience_module/preprocessing.py) —
+# like "requires_verification", none of these are part of the model's
+# trained feature set and must be dropped before prediction, not fed to
+# the model.
 NON_FEATURE_COLUMNS = [
     "requires_verification",
     "unknown_medicine_present",
     "unknown_medicine_names",
+    "drug_interaction_pairs_present",
+    "drug_interaction_pairs_details",
 ]
 
 X = df.drop(
@@ -83,6 +88,14 @@ unknown_medicine_present = bool(
     df.get("unknown_medicine_present", pd.Series([0])).iloc[0]
 )
 
+# A major drug-drug interaction between two RECOGNIZED medicines must also
+# never be treated as safe just because the model didn't see it — same
+# reasoning as unknown_medicine_present above.
+interaction_details = str(
+    df.get("drug_interaction_pairs_details", pd.Series([""])).iloc[0] or ""
+)
+major_interaction_present = "(major)" in interaction_details
+
 # -----------------------------
 # DECISION
 # -----------------------------
@@ -100,6 +113,12 @@ if unknown_medicine_present:
     # anything.
     print("\n[!] MEDICINE NOT FOUND")
     print(f"Unrecognized medicine(s): {unknown_names}")
+    print("Manual verification required before dispensing.")
+
+elif major_interaction_present:
+
+    print("\n[!] MAJOR DRUG INTERACTION")
+    print(interaction_details)
     print("Manual verification required before dispensing.")
 
 elif prediction[0] == 1:

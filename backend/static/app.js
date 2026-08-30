@@ -97,6 +97,47 @@
     results.classList.add("hidden");
   }
 
+  function renderExplanation(explanation) {
+    const container = document.getElementById("explanation-list");
+    container.innerHTML = "";
+
+    if (!explanation || explanation.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "status-text";
+      empty.textContent = "Explanation unavailable for this prediction.";
+      container.appendChild(empty);
+      return;
+    }
+
+    const maxAbs = Math.max(...explanation.map((item) => Math.abs(item.contribution)));
+
+    explanation.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "explanation-row";
+
+      const label = document.createElement("div");
+      label.className = "explanation-label";
+      label.textContent = `${item.feature} (${item.value})`;
+
+      const barTrack = document.createElement("div");
+      barTrack.className = "explanation-bar-track";
+      const bar = document.createElement("div");
+      bar.className = `explanation-bar ${item.direction === "increases_risk" ? "risk" : "safe"}`;
+      const pct = maxAbs > 0 ? (Math.abs(item.contribution) / maxAbs) * 100 : 0;
+      bar.style.width = `${pct}%`;
+      barTrack.appendChild(bar);
+
+      const value = document.createElement("div");
+      value.className = "explanation-value";
+      value.textContent = (item.contribution > 0 ? "+" : "") + item.contribution.toFixed(3);
+
+      row.appendChild(label);
+      row.appendChild(barTrack);
+      row.appendChild(value);
+      container.appendChild(row);
+    });
+  }
+
   function renderResults(data) {
     document.getElementById("patient-name").textContent = data.patient.name;
     document.getElementById("patient-age").textContent = data.patient.age ?? "—";
@@ -156,6 +197,8 @@
       verdictTitle.textContent = "SAFE TO DISPENSE";
       verdictSubtitle.textContent = "Medicine can be dispensed safely.";
     }
+
+    renderExplanation(data.explanation);
 
     const table = document.getElementById("feature-table");
     table.innerHTML = "";

@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import difflib
+import itertools
 
 
 # =====================================
@@ -36,6 +37,12 @@ DRUG_DATABASE_PATH = os.path.join(
     PROJECT_ROOT,
     "data",
     "drug_risk_database.csv"
+)
+
+DRUG_INTERACTIONS_PATH = os.path.join(
+    PROJECT_ROOT,
+    "data",
+    "drug_interactions.csv"
 )
 
 OUTPUT_PATH = os.path.join(
@@ -135,6 +142,35 @@ _KNOWN_NORMALIZED_NAMES = drug_db["_normalized_name"].tolist()
 
 
 # =====================================
+# DRUG-DRUG INTERACTION LOOKUP
+# =====================================
+
+# data/drug_interactions.csv is a small, curated set of well-established,
+# textbook-level drug-drug interactions (~30 pairs) covering some of the
+# medicines in drug_risk_database.csv. It is NOT an exhaustive or
+# clinically-validated interaction database (e.g. Lexicomp/Micromedex/First
+# Databank) — it exists to demonstrate real pairwise interaction checking
+# between the SPECIFIC medicines on one prescription, which is different
+# from (and complements) drug_risk_database.csv's "interaction_risk_flag"
+# column, which only marks that a single drug is *involved in* some known
+# interaction, without checking what it was actually co-prescribed with.
+_interactions_df = pd.read_csv(DRUG_INTERACTIONS_PATH)
+
+# Keyed by a frozenset of the two normalized drug names so lookup doesn't
+# care which order the medicines appear in on the prescription.
+_INTERACTION_LOOKUP = {}
+for _, _row in _interactions_df.iterrows():
+    _key = frozenset({
+        normalize_medicine_name(_row["drug_a"]),
+        normalize_medicine_name(_row["drug_b"]),
+    })
+    _INTERACTION_LOOKUP[_key] = {
+        "severity": str(_row["severity"]).strip().lower(),
+        "description": str(_row["description"]).strip(),
+    }
+
+
+# =====================================
 # BASIC FEATURES
 # =====================================
 
@@ -193,6 +229,12 @@ max_dose_ratio = 0
 # computed risk score.
 unmatched_medicines = []
 
+# Canonical (drug_risk_database.csv) names of medicines that WERE matched,
+# used below to check every pair against the interaction lookup. An
+# unmatched medicine's real identity isn't known, so it can't be checked
+# for interactions — it's already flagged separately as unknown.
+matched_medicine_names = []
+
 
 # =====================================
 # MATCH MEDICINES
@@ -244,6 +286,8 @@ for med in data["medicines"]:
     else:
 
         row = matched.iloc[0]
+
+        matched_medicine_names.append(row["medicine_name"])
 
 
         # -----------------------------
@@ -307,6 +351,41 @@ for med in data["medicines"]:
 
 
 # =====================================
+# CHECK PAIRWISE DRUG-DRUG INTERACTIONS
+# =====================================
+
+# Unlike interaction_risk_present above (a static per-drug flag from
+# drug_risk_database.csv), this checks every actual PAIR of medicines on
+# THIS prescription against the curated interaction list — e.g. it only
+# fires for Warfarin when it's genuinely co-prescribed with Ibuprofen, not
+# just because Warfarin appears on some interaction list at all.
+detected_interactions = []
+
+for drug_a, drug_b in itertools.combinations(matched_medicine_names, 2):
+
+    key = frozenset({
+        normalize_medicine_name(drug_a),
+        normalize_medicine_name(drug_b),
+    })
+
+    interaction = _INTERACTION_LOOKUP.get(key)
+
+    if interaction:
+        detected_interactions.append({
+            "drug_a": drug_a,
+            "drug_b": drug_b,
+            "severity": interaction["severity"],
+            "description": interaction["description"],
+        })
+
+drug_interaction_pairs_present = 1 if detected_interactions else 0
+
+major_interaction_present = any(
+    d["severity"] == "major" for d in detected_interactions
+)
+
+
+# =====================================
 # RISK SCORE
 # =====================================
 
@@ -349,6 +428,10 @@ if max_dose_ratio > 0.8:
     risk_score += 3
 
 
+for _interaction in detected_interactions:
+    risk_score += 3 if _interaction["severity"] == "major" else 2
+
+
 # =====================================
 # UNKNOWN MEDICINE FLAG
 # =====================================
@@ -367,8 +450,10 @@ unknown_medicine_present = (
 # A medicine that couldn't be matched to the drug-risk database must never
 # be treated as safe just because it added nothing to risk_score — force
 # manual verification whenever any medicine is unknown, regardless of the
-# score computed from the medicines that WERE matched.
-if risk_score >= 4 or unknown_medicine_present == 1:
+# score computed from the medicines that WERE matched. A major drug-drug
+# interaction between two medicines that WERE matched must force it too,
+# for the same reason.
+if risk_score >= 4 or unknown_medicine_present == 1 or major_interaction_present:
 
     requires_verification = 1
 
@@ -409,6 +494,21 @@ features = {
 
     "interaction_risk_present":
         interaction_risk_present,
+
+    # NOTE: like unknown_medicine_present/unknown_medicine_names below,
+    # these two columns are NOT part of the model's trained feature set —
+    # callers must drop them before calling model.predict(). They describe
+    # actual pairwise interactions found between the medicines on THIS
+    # prescription (see detected_interactions above), which is more
+    # specific than interaction_risk_present's per-drug flag.
+    "drug_interaction_pairs_present":
+        drug_interaction_pairs_present,
+
+    "drug_interaction_pairs_details":
+        "; ".join(
+            f"{d['drug_a']} + {d['drug_b']} ({d['severity']}): {d['description']}"
+            for d in detected_interactions
+        ),
 
     "black_box_present":
         black_box_present,

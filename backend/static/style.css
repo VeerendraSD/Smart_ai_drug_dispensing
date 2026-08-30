@@ -409,6 +409,61 @@ body {
   border-color: rgba(22, 163, 74, 0.25);
 }
 
+/* ===================== EXPLANATION ===================== */
+
+.explanation-caption {
+  margin: -8px 0 14px;
+}
+
+.explanation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.explanation-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 2fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.explanation-label {
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.explanation-bar-track {
+  height: 10px;
+  border-radius: 4px;
+  background: #e6eaf2;
+  overflow: hidden;
+}
+
+.explanation-bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.explanation-bar.risk {
+  background: var(--danger);
+}
+
+.explanation-bar.safe {
+  background: var(--success);
+}
+
+.explanation-value {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  min-width: 55px;
+  text-align: right;
+}
+
 /* ===================== DETAILS / COLLAPSIBLE ===================== */
 
 .details-card summary {

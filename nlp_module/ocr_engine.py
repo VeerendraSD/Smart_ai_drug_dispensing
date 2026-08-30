@@ -30,9 +30,22 @@ from paddleocr import PaddleOCR
 # INITIALIZE OCR
 # =====================================
 
+# Model choice matters a lot here: the default PaddleOCR models
+# (PP-OCRv6 "medium") take ~50s per image on CPU with no acceleration
+# available (enable_mkldnn=False below is required — enabling it crashes
+# outright on this paddlepaddle version). The "small" detection/recognition
+# variants cut that to ~7s, verified to still parse prescription tables
+# correctly. The doc-orientation/unwarping/textline-orientation
+# sub-pipelines are also disabled since prescription photos are already
+# upright, and skipping them removes unnecessary per-request model loads.
 ocr = PaddleOCR(
     lang="en",
-    enable_mkldnn=False
+    enable_mkldnn=False,
+    use_doc_orientation_classify=False,
+    use_doc_unwarping=False,
+    use_textline_orientation=False,
+    text_detection_model_name="PP-OCRv6_small_det",
+    text_recognition_model_name="PP-OCRv6_small_rec",
 )
 
 
