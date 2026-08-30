@@ -146,6 +146,43 @@ def save_prescription_details(prescription_data):
 
 
 # =====================================
+# GET PRESCRIPTION HISTORY
+# =====================================
+
+def get_prescription_history(limit=50):
+    """Return the most recently analyzed prescriptions, newest first."""
+
+    connection = sqlite3.connect(DATABASE_PATH)
+
+    # Row factory lets each row be read out as a dict below instead of a
+    # plain positional tuple, so the API response stays keyed by column
+    # name even if the SELECT's column order ever changes.
+    connection.row_factory = sqlite3.Row
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            prescription_id,
+            patient_name,
+            patient_age,
+            patient_gender,
+            doctor_name,
+            upload_date,
+            upload_time
+        FROM prescription_records
+        ORDER BY id DESC
+        LIMIT ?
+    """, (limit,))
+
+    records = [dict(row) for row in cursor.fetchall()]
+
+    connection.close()
+
+    return records
+
+
+# =====================================
 # INITIALIZE DATABASE
 # =====================================
 

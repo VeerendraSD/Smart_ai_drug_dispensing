@@ -1,3 +1,22 @@
+"""
+Standalone CLI sanity-check for the trained model.
+
+Loads risk_classifier.pkl and runs it against whatever is currently in
+data/processed/feature_dataset.csv (i.e. the output of the last time
+datascience_module/preprocessing.py ran), then prints a one-line verdict.
+
+This is intentionally kept separate from backend/app.py's /api/analyze
+endpoint, which is the real prediction path used by the running app —
+that endpoint additionally returns confidence/risk scores, a full
+risk-factor breakdown, and persists results to the prescription history
+and data/predictions/. This script exists only so a developer can get a
+fast pass/fail read on the model without starting the FastAPI server.
+
+Because the decision logic here (NON_FEATURE_COLUMNS, the unknown-medicine
+override) duplicates backend/app.py, keep the two in sync if that logic
+ever changes there.
+"""
+
 import pandas as pd
 import joblib
 import os
@@ -74,13 +93,18 @@ if unknown_medicine_present:
         "unknown_medicine_names", pd.Series([""])
     ).iloc[0]
 
-    print("\n⚠ MEDICINE NOT FOUND")
+    # Plain ASCII, not the "⚠" glyph: this script is run directly with
+    # `python prediction.py` on Windows, whose console defaults to the
+    # cp1252 codec — printing that character there raises
+    # UnicodeEncodeError and crashes the script before it can report
+    # anything.
+    print("\n[!] MEDICINE NOT FOUND")
     print(f"Unrecognized medicine(s): {unknown_names}")
     print("Manual verification required before dispensing.")
 
 elif prediction[0] == 1:
 
-    print("\n⚠ HIGH RISK PRESCRIPTION")
+    print("\n[!] HIGH RISK PRESCRIPTION")
     print("Contact hospital for verification.")
 
 else:

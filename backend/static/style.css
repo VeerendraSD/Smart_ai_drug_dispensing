@@ -205,6 +205,16 @@ body {
   display: inline-block;
 }
 
+.btn-secondary {
+  background: var(--surface);
+  color: var(--primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--primary-soft);
+}
+
 .analyze-spinner {
   display: none;
   width: 14px;
@@ -457,6 +467,19 @@ table td {
 table th {
   background: #f7f9fd;
   font-weight: 700;
+}
+
+/* ===================== HISTORY ===================== */
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.history-header .card-title {
+  margin-bottom: 0;
 }
 
 /* ===================== FOOTER ===================== */

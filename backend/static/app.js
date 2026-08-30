@@ -10,6 +10,11 @@
   const errorText = document.getElementById("error-text");
   const results = document.getElementById("results");
 
+  const historyEmpty = document.getElementById("history-empty");
+  const historyTableWrap = document.getElementById("history-table-wrap");
+  const historyTbody = document.getElementById("history-tbody");
+  const historyRefreshBtn = document.getElementById("history-refresh-btn");
+
   // The file (and its identity) currently loaded into the picker.
   // `analyzedFileKey` records which file the results on screen belong
   // to — if the user picks a different file, results are hidden again
@@ -172,6 +177,54 @@
     results.classList.remove("hidden");
   }
 
+  // ===================== HISTORY =====================
+
+  function renderHistory(records) {
+    historyTbody.innerHTML = "";
+
+    if (!records || records.length === 0) {
+      historyEmpty.classList.remove("hidden");
+      historyTableWrap.classList.add("hidden");
+      return;
+    }
+
+    historyEmpty.classList.add("hidden");
+    historyTableWrap.classList.remove("hidden");
+
+    records.forEach((record) => {
+      const tr = document.createElement("tr");
+      [
+        record.prescription_id,
+        record.patient_name || "—",
+        record.patient_age ?? "—",
+        record.patient_gender || "—",
+        record.doctor_name || "—",
+        record.upload_date,
+        record.upload_time,
+      ].forEach((value) => {
+        const td = document.createElement("td");
+        td.textContent = value;
+        tr.appendChild(td);
+      });
+      historyTbody.appendChild(tr);
+    });
+  }
+
+  async function loadHistory() {
+    try {
+      const response = await fetch("/api/history");
+      if (!response.ok) return;
+      renderHistory(await response.json());
+    } catch (_) {
+      // History is a supplementary view — a failed fetch here shouldn't
+      // block the upload/analyze flow from working.
+    }
+  }
+
+  historyRefreshBtn.addEventListener("click", loadHistory);
+
+  loadHistory();
+
   analyzeBtn.addEventListener("click", async () => {
     if (!selectedFile) return;
 
@@ -201,6 +254,7 @@
       const data = await response.json();
       analyzedFileKey = fileKey(selectedFile);
       renderResults(data);
+      loadHistory();
     } catch (err) {
       showError(err.message || String(err));
     } finally {

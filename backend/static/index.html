@@ -156,6 +156,31 @@
 
     </section>
 
+    <!-- ===================== HISTORY ===================== -->
+    <section class="card history-card">
+      <div class="history-header">
+        <h2 class="card-title">📋 Recent Prescriptions</h2>
+        <button id="history-refresh-btn" class="btn btn-secondary" type="button">↻ Refresh</button>
+      </div>
+      <div id="history-empty" class="status-text">No prescriptions analyzed yet.</div>
+      <div id="history-table-wrap" class="table-wrap hidden">
+        <table id="history-table">
+          <thead>
+            <tr>
+              <th>Prescription ID</th>
+              <th>Patient</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Doctor</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 
   <footer class="footer">

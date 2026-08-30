@@ -25,6 +25,9 @@ This project aims to reduce medication errors, improve patient safety, and suppo
 * Drug Interaction Detection
 * Automated Verification Labeling
 * ML-Ready Dataset Generation
+* AI-Based Risk Prediction (trained Random Forest classifier)
+* Web Interface for Prescription Upload & Analysis (FastAPI backend + browser frontend)
+* Prescription Record History (SQLite)
 
 ## Technologies Used
 
@@ -32,31 +35,47 @@ This project aims to reduce medication errors, improve patient safety, and suppo
 * PaddleOCR
 * NLP & Regex
 * pandas
-* Machine Learning
-* FastAPI (Planned)
-* Firebase / MongoDB (Planned)
+* scikit-learn (Random Forest)
+* FastAPI + Uvicorn
+* SQLite
+
+## Getting Started
+
+1. Install [Python 3.12](https://www.python.org/downloads/) (required — `paddlepaddle`/`paddleocr` don't yet support newer Python versions).
+2. Double-click `start_app.bat` (Windows). On first run it creates a local `.venv`, installs everything in `requirements.txt`, then starts the server and opens `http://127.0.0.1:8000` in your browser. Later runs skip straight to starting the server.
+3. Upload a prescription image on the page to run it through the full pipeline (OCR → structuring → feature engineering → risk prediction).
+
+To run manually instead of via the launcher:
+
+```
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn backend.app:app --host 127.0.0.1 --port 8000
+```
 
 ## Current Status
 
-*Phase 1 Completed*
+*Phase 1 & 2 Completed*
 
 * OCR Pipeline
 * JSON Structuring
 * Feature Engineering
 * Risk Label Generation
 * ML-Ready Dataset Creation
+* Risk Prediction Model Trained & Deployed
+* FastAPI Backend + Web UI
+* Prescription Record History (SQLite)
 
 ---
 
 ## Future Scope
 
-* ML Model Training
-* Real-Time Risk Prediction
 * Automated Voice Verification Calls
-* FastAPI Backend
-* Flutter Frontend
+* Flutter Frontend (mobile)
 * Cloud Deployment
-* Database Integration
+* Expanded Database Integration (cloud-hosted patient history, multi-user access)
+* Authentication & Access Control
 
 ---
 

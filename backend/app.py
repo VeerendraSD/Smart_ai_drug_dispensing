@@ -20,6 +20,7 @@ import os
 import sys
 import json
 import subprocess
+from datetime import datetime
 
 import pandas as pd
 import joblib
@@ -27,7 +28,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from .database import save_prescription_details
+from .database import save_prescription_details, get_prescription_history
 
 # =====================================
 # PATHS
@@ -49,6 +50,7 @@ OCR_TEXT_PATH = project_path("data", "processed", "ocr_text.txt")
 FEATURE_CSV_PATH = project_path("data", "processed", "feature_dataset.csv")
 MODEL_PATH = project_path("ml_module", "risk_classifier.pkl")
 LATEST_JSON_PATH_FILE = project_path("data", "processed", "latest_json_path.txt")
+PREDICTIONS_DIR = project_path("data", "predictions")
 
 PIPELINE_STAGES = [
     ("OCR Engine", project_path("nlp_module", "ocr_engine.py")),
@@ -69,6 +71,19 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 @app.get("/")
 def serve_index():
     return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+
+
+# =====================================
+# HISTORY ENDPOINT
+# =====================================
+
+@app.get("/api/history")
+def get_history(limit: int = 50):
+    """Return the most recently analyzed prescriptions, newest first, from
+    the local SQLite record store — the same records save_prescription_details()
+    writes at the end of every /api/analyze call."""
+
+    return get_prescription_history(limit=limit)
 
 
 # =====================================
@@ -179,9 +194,20 @@ async def analyze_prescription(file: UploadFile = File(...)):
     # medicine must never be silently treated as safe just because it
     # contributed no risk features.
     unknown_medicine_present = bool(row.get("unknown_medicine_present", 0))
+
+    # An empty "unknown_medicine_names" cell round-trips through the CSV as
+    # a real empty string, but pandas reads that back as NaN (a float), not
+    # "". `str(nan)` is the literal text "nan", and since NaN is truthy in
+    # Python, `nan or ""` doesn't catch it either — so without this check
+    # the list below would end up as ["nan"] instead of [] whenever there
+    # are no unknown medicines. Normalize NaN to "" first to avoid that.
+    raw_unknown_names = row.get("unknown_medicine_names", "")
+    if pd.isna(raw_unknown_names):
+        raw_unknown_names = ""
+
     unknown_medicine_names = [
         name.strip()
-        for name in str(row.get("unknown_medicine_names", "") or "").split(";")
+        for name in str(raw_unknown_names).split(";")
         if name.strip()
     ]
 
@@ -225,7 +251,7 @@ async def analyze_prescription(file: UploadFile = File(...)):
     patient = prescription_data.get("patient", {})
     doctor = prescription_data.get("doctor", {})
 
-    return {
+    response_data = {
         "patient": {
             "name": patient.get("name") or "Unknown",
             "age": patient.get("age"),
@@ -249,3 +275,27 @@ async def analyze_prescription(file: UploadFile = File(...)):
         "unknown_medicine_names": unknown_medicine_names,
         "feature_data": json.loads(feature_df.to_json(orient="records"))[0],
     }
+
+    # ---- persist a per-analysis prediction record ----
+    # Kept separate from the SQLite history: this is the FULL analysis
+    # result (risk factors, confidence, feature breakdown) for whoever
+    # ran this specific prescription through the pipeline, filed under
+    # its prescription_id — not just the patient/doctor summary row that
+    # save_prescription_details() writes to the database. Timestamped so
+    # re-analyzing the same prescription_id doesn't overwrite an earlier
+    # run's record.
+    try:
+        os.makedirs(PREDICTIONS_DIR, exist_ok=True)
+        prescription_id = prescription_data.get("prescription_id") or "unknown"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        prediction_file = os.path.join(
+            PREDICTIONS_DIR, f"{prescription_id}_{timestamp}.json"
+        )
+        with open(prediction_file, "w", encoding="utf-8") as f:
+            json.dump(response_data, f, indent=2)
+    except Exception as e:
+        # Saving the prediction record must not block returning the
+        # analysis itself.
+        print(f"WARNING: failed to save prediction record: {e}", file=sys.stderr)
+
+    return response_data
